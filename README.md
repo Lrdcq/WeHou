@@ -19,4 +19,20 @@ What we have done:
 
 ### Demo Games
 
-DEMO 7 : [狸舞贺春短剧](./demo7/) [2015-2-27]
+DEMO 7 : [狸舞賀春短劇](http://demo7.lrd.moe) [2015-2-27] 
+
+![DEMO7](./img/demo7.jpg)
+
+DEMO 6 : [秦心符卡STG化複刻](http://demo6.lrd.moe) [2014-10-11] 
+
+![DEMO6](./img/demo6.jpg)
+
+DEMO 5 : [幻想格林尼治](http://demo5.lrd.moe) [2014-6-7] 
+
+![DEMO5](./img/demo5.jpg)
+
+DEMO 4 : [曲綫激光祭](http://demo4.lrd.moe) [2014-1-22] 
+
+![DEMO4](./img/demo4.jpg)
+
+Other game is so immature...
