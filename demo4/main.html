@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>WEBGL弹幕游戏work-lrdcq.com</title>
+<script src="three.min.js"></script>
+<script src="WehouCore.js"></script>
+<script src="WehouGame.js"></script>
+</head>
+<body style="background-image:url('img/bg.jpg');background-repeat:no-repeat;">
+<div id='canvas-bg' style='border:3px solid #000;width: 500px;height: 550px;position:absolute;top:25px;left:30px;'></div>
+<div id="mygame"style='position:fixed;top:25px;left:30px;'></div>
+</body>
+<script type="text/javascript">
+WEHOUGAME.userInt=function(){
+	WEHOUGAME.addMusic("bgm.ogg",1);
+	WEHOUGAME.addBulletImg(['img/bullet_1.png','img/bullet_2.png','img/sysimg_01.png'],1);
+	WEHOUGAME.addBulletImg(['img/bullet_1.png'],0);
+	WEHOUGAME.addBoss(WEHOUGAME.getBulletImg(0),0,0,[0,0,0,0]);
+	//故事
+	var lasttime=0;
+	//
+	WEHOUGAME.mainstory.setName('demo4_test_20140121_end1');
+	//
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),24,24,6,'ball',4,[3/4,1,9/32,10/32]);//id==00
+	WEHOUGAME.mainstory.add(//开场
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{mesh:WEHOUGAME.getBullet(0),speed:[0],period:49,lifetime:220},
+		{type:'line',linelong:200,target:new THREE.Vector2(-2000,20000),position:new THREE.Vector2(-140,140),speed:[4.8],palstance:[3.8],lifetime:350,period:1000,materialcut:[1/16,2/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20000,-2000),position:new THREE.Vector2(-110,80),speed:[4],palstance:[0],lifetime:350,period:1000,materialcut:[2/16,3/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',10,['va',6,0]],['t',40,['va',0,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20000,2000),position:new THREE.Vector2(-5,-5),speed:[2],palstance:[0],lifetime:350,period:1000,materialcut:[3/16,4/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',30,['va',-5,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20300,19400),position:new THREE.Vector2(40,80),speed:[3.6],palstance:[0],lifetime:350,period:1000,materialcut:[4/16,5/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',23,['va',32,0]],['t',27,['va',0,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(2000,20000),position:new THREE.Vector2(120,30),speed:[6.5],palstance:[0],lifetime:350,period:1000,materialcut:[5/16,6/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',12,['va',47,0]],['t',14,['va',9,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20000,-2000),position:new THREE.Vector2(-210,-40),speed:[4.2],palstance:[0],lifetime:350,period:1000,materialcut:[6/16,7/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',29,['va',45,0]],['t',31,['va',0,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20000,-2000),position:new THREE.Vector2(-40,-120),speed:[6.7],palstance:[-8.7],lifetime:350,period:1000,materialcut:[7/16,8/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',42,['va',9,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(-2000,20000),position:new THREE.Vector2(60,-80),speed:[4.0],palstance:[0],lifetime:350,period:1000,materialcut:[8/16,9/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',7,['va',10,0]],['t',25,['va',-10,0]],['t',43,['va',0,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0,'va',0,1]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(2000,20000),position:new THREE.Vector2(60,-130),speed:[6.7],palstance:[0],lifetime:350,period:1000,materialcut:[9/16,10/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',12,['va',47,0]],['t',14,['va',9,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]},
+		{type:'line',linelong:200,target:new THREE.Vector2(20000,2000),position:new THREE.Vector2(180,-170),speed:[2],palstance:[0],lifetime:350,period:1000,materialcut:[10/16,11/16],linematerial:WEHOUGAME.getBulletImg(1),bulletevents:[['t',30,['va',-5,0]],['t',50,['v',0.01,0]],['t',1,['bb',[0,0],0]],['t',51,['bb',0,0]],['t',150,['t',WEHOUCORE.lmpos,0,'v',8,0,'va',0,1]]]}
+		],
+		[0,new THREE.Vector2(300,500),new THREE.Vector2(0,0),100,new THREE.Vector2(0,100),new THREE.Vector2(0,0),3000,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),0],
+		[[],[1,2,3,4,5,6,7,8,9,10]]
+	);
+	WEHOUGAME.mainstory.adds([0,[0],[5,[WEHOUGAME.getMusic(0),0,260,1],7,[0,1]]]);
+	WEHOUGAME.mainstory.add(//Lv1
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{type:'line',linelong:40,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[14/16,15/16],number:7,angle:[15],speed:[-8],palstance:[8],period:250,timeoffset:10,target:WEHOUCORE.lmpos,bulletevents:[['t',72,['va',0,0]]]},
+		{type:'line',linelong:40,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],number:7,angle:[15],speed:[-8],palstance:[-8],period:250,timeoffset:160,target:WEHOUCORE.lmpos,bulletevents:[['t',72,['va',0,0]]]},
+		{type:'line',linelong:40,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[1/16,2/16],speed:[-8],palstance:[-8],period:56,timeoffset:0,target:WEHOUCORE.lmpos,bulletevents:[['t',24,['va',0,0,'t',WEHOUCORE.lmpos,0,'a',0.06,0,'v',2,0]]]},
+		{type:'line',linelong:40,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[5/16,6/16],speed:[-8],palstance:[8],period:56,timeoffset:28,target:WEHOUCORE.lmpos,bulletevents:[['t',24,['va',0,0,'t',WEHOUCORE.lmpos,0,'a',0.06,0,'v',2,0]]]},
+		{type:'line',linelong:40,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],speed:[2],period:56,timeoffset:19,target:WEHOUCORE.lmpos,bulletevents:[['t',24,['a',0.06,0,'v',2,0]]]},
+		{mesh:WEHOUGAME.getBullet(0),speed:[0],period:28,lifetime:32}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),50,new THREE.Vector2(0,100),new THREE.Vector2(200,200),300,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),0],
+		[[2,3,4,5],[0,1,2,3,4,5]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=380,[1],[2,1200,0,"Lv1「回旋自机狙」",6,['Laser Generator',7,1],7,[25600,0.5]]]);
+	WEHOUGAME.mainstory.add(//Lv2
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),lifetime:220,materialcut:[11/16,12/16],number:20,target:WEHOUCORE.lmpos,bulletevents:[['t',40,['a',0,0]],['t',80,['a',0.07,0,'va',1.5,0]],['t',140,['va',0,0]]],speed:[5],acceleration:[-0.09],period:400,myevents:[[700,'num',24]]},
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),lifetime:220,materialcut:[11/16,12/16],number:20,target:WEHOUCORE.lmpos,bulletevents:[['t',40,['a',0,0]],['t',80,['a',0.07,0,'va',-1.5,0]],['t',140,['va',0,0]]],speed:[5],acceleration:[-0.09],period:400,angleoffset:9,myevents:[[700,'num',24],[700,'aoff',8]]},
+		{type:'line',linelong:30,linematerial:WEHOUGAME.getBulletImg(1),lifetime:40,materialcut:[14/16,15/16],number:2,target:WEHOUCORE.lmpos,speed:[10],period:400,timeoffset:130,palstance:[1,-1],bulletevents:[['t',1,['bb',[3,0],0]]],angleoffset:45,myevents:[[700,'v',[8]]]},
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),lifetime:220,materialcut:[11/16,12/16],number:2,target:new THREE.Vector2(30000,30000),bulletevents:[['t',30,['a',0,0]],['t',50,['a',0.07,0,'va',1,0]],['t',90,['va',0,0]]],speed:[4],acceleration:[-0.1],period:4},
+		{type:'line',linelong:30,linematerial:WEHOUGAME.getBulletImg(1),lifetime:40,materialcut:[14/16,15/16],number:2,target:WEHOUCORE.lmpos,speed:[10],period:400,timeoffset:130,palstance:[1,-1],bulletevents:[['t',1,['bb',[5,0],0]]],angleoffset:45,myevents:[[700,'v',[8]]]},
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),lifetime:220,materialcut:[11/16,12/16],number:2,target:new THREE.Vector2(30000,30000),bulletevents:[['t',30,['a',0,0]],['t',50,['a',0.07,0,'va',-1,0]],['t',90,['va',0,0]]],speed:[4],acceleration:[-0.1],period:4,timeoffset:2},
+		{type:'line',linelong:30,linematerial:WEHOUGAME.getBulletImg(1),lifetime:40,materialcut:[14/16,15/16],number:2,target:WEHOUCORE.lmpos,speed:[10],period:400,timeoffset:190,palstance:[1,-1],bulletevents:[['t',1,['bb',[3,0],0]]],angleoffset:-45,myevents:[[700,'v',[8]]]},
+		{type:'line',linelong:30,linematerial:WEHOUGAME.getBulletImg(1),lifetime:40,materialcut:[14/16,15/16],number:2,target:WEHOUCORE.lmpos,speed:[10],period:400,timeoffset:190,palstance:[1,-1],bulletevents:[['t',1,['bb',[5,0],0]]],angleoffset:-45,myevents:[[700,'v',[8]]]}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),50,new THREE.Vector2(0,120),new THREE.Vector2(0,0),0],
+		[[0,1,2,4,6,7]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=1200,[2],[2,1200,0,"Lv2「樱色贪欲」",6,['Laser Generator',6,0],7,[114500,0.7]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),40,40,10,'ball',1,[6/8,7/8,11/16,10/16]);//id==01
+	WEHOUGAME.mainstory.add(//Lv3
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{type:'line',linelong:18,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],number:1,speed:[7],acceleration:[-0.1],palstance:[4],period:1,number:1,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['va',-1.2,0,'a',0.06,0]]],anglechange:[38,10000],speedchange:[-0.02,-2],lifetime:140},
+		{type:'line',linelong:18,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],number:1,speed:[7],acceleration:[-0.1],palstance:[-4],period:1,number:1,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['a',0.08,0,'va',-0.8,0]]],anglechange:[-38,-10000],speedchange:[-0.02,-2],lifetime:140},
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[1/16,2/16],number:1,speed:[6],acceleration:[-0.1],palstance:[2001],period:33,number:8,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['a',0,0]]],anglechange:[22.5,10000],lifetime:320,timeoffset:20,speedchange:[-0.6,-1.8]},
+		{type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(1),materialcut:[1/16,2/16],number:1,speed:[6],acceleration:[-0.1],palstance:[1999],period:33,number:8,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['a',0,0]]],anglechange:[22.5,10000],lifetime:320,timeoffset:20,speedchange:[-0.6,-1.8]},
+		{mesh:WEHOUGAME.getBullet(1),speed:[5],speedrandom:2,acceleration:[-0.1],palstance:[2000.8],period:25,number:3,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['a',0,0.02]]],anglechange:[22.5,10000],lifetime:320,timeoffset:20,myevents:[[200,'num',5]]},
+		{mesh:WEHOUGAME.getBullet(1),speed:[5],speedrandom:2,acceleration:[-0.1],palstance:[1999.2],period:25,number:3,target:new THREE.Vector2(2000,2000),bulletevents:[['t',30,['a',0,0.02]]],anglechange:[22.5,10000],lifetime:320,timeoffset:20,myevents:[[200,'num',5]]}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),60,new THREE.Vector2(0,120),new THREE.Vector2(20,20),120,new THREE.Vector2(0,120),new THREE.Vector2(20,20),160,new THREE.Vector2(0,120),new THREE.Vector2(0,0),260,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),360,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),0],
+		[[0],[1],[],[2,3,4,5],[]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=1200,[3],[2,1200,0,"Lv3「圣光漩涡」",6,['Laser Generator',5,0],7,[714500,0.6]]]);
+	WEHOUGAME.mainstory.add(//Lv4
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{position:new THREE.Vector2(-255,275),positionlock:false,target:new THREE.Vector2(20000,-2000),speed:[5],lifetime:110,period:100,bulletevents:[['t',1,['bb',[1,0],0]]]},
+		{type:'line',linelong:50,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[5/16,6/16],period:16,palstance:[3],target:new THREE.Vector2(20100,20000-57.7),bulletevents:[['nt',[40,0],['va',3,0]],['nt',[40,20],['va',-3,0]]],lifetime:180},
+		{position:new THREE.Vector2(255,-275),positionlock:false,target:new THREE.Vector2(20000,2000),speed:[5],lifetime:110,period:100,bulletevents:[['t',1,['bb',[3,0],0]]]},
+		{type:'line',linelong:50,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[5/16,6/16],period:16,palstance:[3],target:new THREE.Vector2(19900,20000+57.7),bulletevents:[['nt',[40,0],['va',3,0]],['nt',[40,20],['va',-3,0]]],lifetime:180},
+		{type:'line',linelong:30,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),position:new THREE.Vector2(20000,280),positionlock:false,materialcut:[2/16,3/16],period:56,palstance:[3],target:new THREE.Vector2(20000-57.7,19900),bulletevents:[['nt',[40,0],['va',3,0]],['nt',[40,20],['va',-3,0]]],lifetime:180,timeoffset:200},
+		{type:'line',linelong:30,speed:[7],linematerial:WEHOUGAME.getBulletImg(1),position:new THREE.Vector2(-255,200),positionlock:false,materialcut:[6/16,7/16],period:56,palstance:[3],angleoffset:-30,bulletevents:[['nt',[40,0],['va',3,0]],['nt',[40,20],['va',-21,0]]],lifetime:200,timeoffset:700},
+		{type:'line',linelong:30,speed:[7],linematerial:WEHOUGAME.getBulletImg(1),position:new THREE.Vector2(255,200),positionlock:false,materialcut:[6/16,7/16],period:56,palstance:[3],angleoffset:-30,bulletevents:[['nt',[40,0],['va',21,0]],['nt',[40,20],['va',-3,0]]],lifetime:200,timeoffset:700}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),60,new THREE.Vector2(0,0),new THREE.Vector2(0,0),0],
+		[[0,2,4,5,6]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=1200,[4],[2,1200,0,"Lv4「竹蛇的舞潮」",6,['Laser Generator',4,0],7,[1612500,0.7]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(3),20,20,4,'ball',1,[10/16,11/16,27/32,28/32]);//id==02
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(3),20,20,4,'ball',1,[2/16,3/16,27/32,28/32]);//id==03
+	WEHOUGAME.mainstory.add(//Lv5
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{type:'line',linelong:200,speed:[0],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],period:2000,number:3,angle:[-360],acceleration:[-0.1],palstancerandom:2,target:WEHOUCORE.lmpos,bulletevents:[['t',60,['a',0,0]],['+y',277,['-y',0,0,'bb',[2,0],1,'gy',0,0]],['-y',-272,['-y',0,0,'bb',[2,0],1,'gy',0,0]],['+x',252,['-x',0,0,'bb',[1,0],1,'gx',0,0]],['-x',-252,['-x',0,0,'bb',[1,0],1,'gx',0,0]]],lifetime:2000},
+		{number:16,speed:[5],lifetime:250,outfield:false,mesh:WEHOUGAME.getBullet(3),palstance:[4],bulletevents:[['t',50,['va',0,0,'a',-0.05,0]],['t',150,['a',0,0]]]},
+		{number:16,speed:[5],lifetime:250,outfield:false,mesh:WEHOUGAME.getBullet(2),palstance:[-4],bulletevents:[['t',50,['va',0,0,'a',-0.05,0]],['t',150,['a',0,0]]]}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),50,new THREE.Vector2(0,50),new THREE.Vector2(200,120),150,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),0],
+		[[],[0]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=1200,[5],[2,1000,0,"Lv5「墙角丛花开」",6,['Laser Generator',3,0],7,[544500,0.7]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),12,360,4,'laser',1,[0,1,14/16,15/16],1);//id==04
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),80,80,20,'ball',1,[0,1/4,0,1/8]);//id==05
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),80,80,20,'ball',1,[1/4,2/4,1/8,2/8]);//id==06
+	WEHOUGAME.mainstory.add(//Lv6
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{position:new THREE.Vector2(-255,300),positionlock:false,target:new THREE.Vector2(20000,-2000),speed:[1],lifetime:580,period:300,bulletevents:[['t',1,['bb',[1,0],1]]]},
+		{mesh:WEHOUGAME.getBullet(4),type:'laser',lifetime:580,period:9000,number:3,angle:[0],speed:[20,430,840],appearline:30,locked:true,target:new THREE.Vector2(2000,20000),bulletevents:[['t',1,['v',0.001,0]]]},
+		{position:new THREE.Vector2(255,300),positionlock:false,target:new THREE.Vector2(20000,-2000),speed:[1],lifetime:580,period:300,bulletevents:[['t',1,['bb',[3,0],1]]],timeoffset:150},
+		{mesh:WEHOUGAME.getBullet(4),type:'laser',lifetime:580,period:9000,number:2,angle:[0],speed:[135,-275],appearline:30,locked:true,target:new THREE.Vector2(2000,20000),bulletevents:[['t',1,['v',0.001,0]]]},
+		{mesh:WEHOUGAME.getBullet(5),positionlock:false,bulletevents:[['ds',[WEHOUCORE.lmpos,80],['bb',[7,0],1,'btime',530,0,'v',0,0,'ms',WEHOUGAME.getBullet(6),0]]],target:new THREE.Vector2(20000,-2000),outfield:true,position:new THREE.Vector2(-205,300),lifetime:580,period:300,speed:[1]},
+		{mesh:WEHOUGAME.getBullet(5),positionlock:false,bulletevents:[['ds',[WEHOUCORE.lmpos,80],['bb',[7,0],1,'btime',530,0,'v',0,0,'ms',WEHOUGAME.getBullet(6),0]]],target:new THREE.Vector2(20000,-2000),outfield:true,position:new THREE.Vector2(205,300),lifetime:580,period:300,speed:[1]},
+		{mesh:WEHOUGAME.getBullet(5),positionlock:false,bulletevents:[['ds',[WEHOUCORE.lmpos,80],['bb',[7,0],1,'btime',530,0,'v',0,0,'ms',WEHOUGAME.getBullet(6),0]]],target:new THREE.Vector2(20000,-2000),outfield:true,position:new THREE.Vector2(0,300),lifetime:580,period:300,speed:[1],timeoffset:150},
+		{type:'line',linelong:50,lifetime:400,bulletevents:[['-ds',[WEHOUCORE.lmpos,200],['v',0.001,0,'btime',350,0,'a',0,0,'bb',[8,0],1]]],speed:[0],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[13/16,14/16],acceleration:[0.02],palstance:[1.2],autopalstance:true},
+		{mesh:WEHOUGAME.getBullet(5),positionlock:false,bulletevents:[['t',50,['t',WEHOUCORE.lmpos,0,'a',0.02,0]],['ds',[WEHOUCORE.lmpos,80],['bb',[7,0],1,'btime',530,0,'v',0,0,'ms',WEHOUGAME.getBullet(6),0]]],outfield:true,position:new THREE.Vector2(-205,300),lifetime:580,period:400,speed:[0],palstance:[0.6],autopalstance:true}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),50,new THREE.Vector2(0,50),new THREE.Vector2(0,0),0],
+		[[0,2,4,5,6]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=1000,[6],[2,2000,0,"Lv6「进击的激光」",6,['Laser Generator',2,0],7,[2113500,0.8]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),14,600,6,'laser',1,[2/16,3/16,31.1/32,31.9/32]);//id==07 逼近杆
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),80,80,0,'ball',1,[4/4,3/4,3/8,4/8]);//id==08 终点徽章
+	WEHOUGAME.mainstory.add(//Lv6
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{position:new THREE.Vector2(260,300),target:new THREE.Vector2(20000,-2000),speed:[2.5],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[1,0],1]],['t',184,['v',0,0]]]},
+		//横向逼近引擎   0
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(2000,20000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//横向逼近       1
+		{position:new THREE.Vector2(260,300),target:new THREE.Vector2(-2000,20000),speed:[2.07],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[3,0],1]],['t',184,['v',0,0]]]},
+		//纵向逼近引擎   2
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(20000,2000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//纵向逼近       3
+		{lifetime:300000,period:300000,speed:[0],mesh:WEHOUGAME.getBullet(8),position:new THREE.Vector2(0,70),bulletevents:[['t',20,['bb',[5,0],9]],['ds',[WEHOUCORE.lmpos,40],['btime',300000-10,0,'bb',[11,0],5]]]},
+		//迷宫1终点徽章  4
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[6/16,7/16],positionlock:false,position:new THREE.Vector2(-260,-158),target:new THREE.Vector2(2000,20000),lifetime:150,period:45,bulletevents:[['t',49,['va',60,0]],['t',52,['va',0,0]],['t',1,['bb',[6,0],5]]]},
+		//迷宫1线条1     5
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[6/16,7/16],positionlock:false,position:new THREE.Vector2(260,-65),target:new THREE.Vector2(-2000,20000),lifetime:180,period:100,bulletevents:[['t',49,['va',-30,0]],['t',52,['va',0,0]],['t',82,['va',-30,0]],['t',85,['va',0,0]],['t',114,['va',-30,0]],['t',1,['bb',[7,0],5]]]},
+		//迷宫1线条2     6
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[6/16,7/16],positionlock:false,position:new THREE.Vector2(260,130),target:new THREE.Vector2(-2000,20000),lifetime:160,period:100,bulletevents:[['t',39,['va',30,0]],['t',42,['va',0,0]],['t',52,['va',30,0]],['t',55,['va',0,0]],['t',84,['va',30,0]],['t',1,['bb',[8,0],5]]]},
+		//迷宫1线条3     7
+		{period:300000,type:'line',linelong:20,speed:[6],palstance:[-1.4],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],positionlock:false,position:new THREE.Vector2(0,280),target:new THREE.Vector2(20000,-2000),lifetime:160,period:100,bulletevents:[['t',1,['bb',[9,0],5]]]},
+		//迷宫1线条4     8
+		{period:300000,type:'line',linelong:20,speed:[6],palstance:[1.4],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],positionlock:false,position:new THREE.Vector2(260,30),target:new THREE.Vector2(-2000,20000),lifetime:160,period:100,bulletevents:[]},
+		//迷宫1线条5     9
+		{lifetime:300000,period:300000,speed:[0],bulletevents:[['t',1,['bb',[0,0],5]],['t',2,['bb',[2,0],5]],['t',160,['bb',[4,0],5]]]},
+		//迷宫1的引入时间轴 10
+		{lifetime:300000,period:300000,speed:[0],bulletevents:[['t',50,['bb',[12,0],5]],['t',51,['bb',[14,0],5]],['t',210,['bb',[16,0],5]]]},
+		//迷宫2的引入时间轴 11
+		{position:new THREE.Vector2(260,-300),target:new THREE.Vector2(20000,2000),speed:[2.6],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[13,0],1]],['t',184,['v',0,0]]]},
+		//横向逼近引擎2   12
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(2000,20000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//横向逼近2       13
+		{position:new THREE.Vector2(260,300),target:new THREE.Vector2(-2000,20000),speed:[2.18],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[15,0],1]],['t',184,['v',0,0]]]},
+		//纵向逼近引擎2   14
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(20000,2000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//纵向逼近2       15
+		{lifetime:300000,period:300000,speed:[0],mesh:WEHOUGAME.getBullet(8),position:new THREE.Vector2(-100,-150),bulletevents:[['t',20,['bb',[17,0],9]],['ds',[WEHOUCORE.lmpos,40],['btime',300000-10,0,'bb',[25,0],5]]]},
+		//迷宫2终点徽章   16
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],positionlock:false,position:new THREE.Vector2(-40,280),target:new THREE.Vector2(20100,19900),lifetime:90,period:45,bulletevents:[['t',24,['va',60,0]],['t',27,['va',0,0]],['t',1,['bb',[18,0],5]]]},
+		//迷宫2线条1      17
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],positionlock:false,position:new THREE.Vector2(-260,170),target:new THREE.Vector2(2000,20000),lifetime:140,period:40,bulletevents:[['t',30,['va',-15,0]],['t',33,['va',0,0]],['t',58,['va',15,0]],['t',67,['va',0,0]],['t',84,['va',30,0]],['t',1,['bb',[19,0],5]]]},
+		//迷宫2线条2      18
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],positionlock:false,position:new THREE.Vector2(260,-50),target:new THREE.Vector2(-2000,20000),lifetime:120,period:40,bulletevents:[['t',15,['va',-15,0]],['t',18,['va',0,0]],['t',42,['va',15,0]],['t',45,['va',0,0]],['t',59,['va',30,0]],['t',1,['bb',[20,0],5]]]},
+		//迷宫2线条3      19
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],positionlock:false,position:new THREE.Vector2(-260,20),target:new THREE.Vector2(2000,20000),lifetime:120,period:40,bulletevents:[['t',26,['va',-15,0]],['t',29,['va',0,0]],['t',50,['va',15,0]],['t',53,['va',0,0]],['t',60,['va',30,0]],['t',1,['bb',[21,0],5]]]},
+		//迷宫2线条4      20
+		{period:300000,type:'line',linelong:50,speed:[8],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[2/16,3/16],positionlock:false,position:new THREE.Vector2(260,-170),target:new THREE.Vector2(-2000,20000),lifetime:180,period:40,bulletevents:[['t',20,['va',-15,0]],['t',23,['va',0,0]],['t',42,['va',15,0]],['t',45,['va',0,0]],['t',57,['va',30,0]],['t',60,['va',0,0]],['t',77,['va',30,0]],['t',80,['va',0,0]],['t',110,['a',-0.4,0]],['t',130,['a',0,0,'v',0.0001,0]],['t',1,['bb',[22,0],5]]]},
+		//迷宫2线条5      21
+		{period:300000,type:'line',linelong:25,speed:[6],palstance:[-1.4],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],positionlock:false,position:new THREE.Vector2(0,280),target:new THREE.Vector2(20100,19900),lifetime:180,period:100,bulletevents:[['t',1,['bb',[23,0],5]]]},
+		//迷宫2线条6      22
+		{period:300000,type:'line',linelong:25,speed:[6],palstance:[1.4],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],positionlock:false,position:new THREE.Vector2(260,50),target:new THREE.Vector2(-2000,20000),lifetime:180,period:100,bulletevents:[['t',1,['bb',[24,0],5]]]},
+		//迷宫2线条7      23
+		{period:300000,type:'line',linelong:30,speed:[6],palstance:[-2],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],positionlock:false,position:new THREE.Vector2(-260,-100),target:new THREE.Vector2(2000,20000),lifetime:100,period:100,bulletevents:[]},
+		//迷宫2线条8      24
+		{lifetime:300000,period:300000,speed:[0],bulletevents:[['t',50,['bb',[27,0],5]],['t',51,['bb',[29,0],5]],['t',210,['bb',[26,0],5]]]},
+		//迷宫3的引入时间轴25
+		{lifetime:300000,period:300000,speed:[0],mesh:WEHOUGAME.getBullet(8),position:new THREE.Vector2(200,210),bulletevents:[['t',10,['bb',[35,0],1]],['t',20,['bb',[31,0],9]],['ds',[WEHOUCORE.lmpos,40],['btime',300000-10,0,'jumpnext',0,0]]]},
+		//迷宫3终点徽章   26
+		{position:new THREE.Vector2(260,300),target:new THREE.Vector2(20000,-2000),speed:[2.7],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[28,0],1]],['t',184,['v',0,0]]]},
+		//横向逼近引擎3   27
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(2000,20000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//横向逼近3       28
+		{position:new THREE.Vector2(260,300),target:new THREE.Vector2(-2000,20000),speed:[2.2],lifetime:400,period:300000,bulletevents:[['t',1,['bb',[30,0],1]],['t',184,['v',0,0]]]},
+		//纵向逼近引擎3   29
+		{mesh:WEHOUGAME.getBullet(7),type:'laser',lifetime:200,period:300000,number:1,angle:[0],speed:[0],appearline:30,locked:true,target:new THREE.Vector2(20000,2000),bulletevents:[['t',1,['v',0.001,0]]]},
+		//纵向逼近3       30
+		{period:300000,type:'line',linelong:50,speed:[9],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[14/16,15/16],positionlock:false,position:new THREE.Vector2(-40,-280),target:new THREE.Vector2(20000,2000),lifetime:122,period:45,bulletevents:[['t',18,['va',-5,0,'v',10,0]],['t',36,['v',6,0]],['t',72,['v',0.01,0]],['t',1,['bb',[32,0],5]]]},
+		//迷宫3线条1      31
+		{period:300000,type:'line',linelong:50,speed:[9],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[14/16,15/16],positionlock:false,position:new THREE.Vector2(-260,-200),target:new THREE.Vector2(2000,20000),lifetime:165,period:45,bulletevents:[['t',7,['va',5,0,'v',9,0]],['t',25,['va',-5,0,'v',13,0]],['t',43,['v',11,0]],['t',79,['v',5,0]],['t',115,['v',0.01,0]],['t',1,['bb',[33,0],5]]]},
+		//迷宫3线条2      32
+		{period:300000,type:'line',linelong:50,speed:[9],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[14/16,15/16],positionlock:false,position:new THREE.Vector2(240,-280),target:new THREE.Vector2(20000,2000),lifetime:180,period:45,bulletevents:[['t',22,['va',2,0,'v',6.6,0]],['t',112,['va',-13,0]],['t',1,['bb',[34,0],5]]]},
+		//迷宫3线条3      33
+		{period:300000,type:'line',linelong:25,speed:[6],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[14/16,15/16],positionlock:false,position:new THREE.Vector2(-260,0),target:new THREE.Vector2(2000,20000),lifetime:210,period:45,bulletevents:[['t',1,['va',-0.5,0]],['t',15,['va',10,0]],['t',33,['va',-0.49,0]],['t',45,['va',-7,0]],['t',72,['va',-0.47,0]],['t',99,['va',10,0]],['t',114,['va',0.5,0]],['t',124,['va',-7,0]],['t',152,['va',-0.5,0]],['t',166,['va',10,0]],['t',184,['va',-0.5,0]]]},
+		//迷宫3线条4      34
+		{period:300000,lifetime:300000,type:'line',linelong:25,speed:[1.7],linematerial:WEHOUGAME.getBulletImg(1),materialcut:[8/16,9/16],bulletevents:[['nt',[1,0],['t',WEHOUCORE.lmpos,0]]]}
+		//迷宫3线条跟踪      35
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),100,new THREE.Vector2(0,80),new THREE.Vector2(0,0),0],
+		[[10]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=2000,[7],[2,999999,0,"LvTOP「激光大迷宫」",6,['Laser Generator',1,0],7,[11255500,0.4,-127]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),10,2000,5,'laser',1,[0,1,1/16,2/16],1);//id==09
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),10,2000,5,'laser',1,[0,1,2/16,3/16],1);//id==10
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),10,2000,5,'laser',1,[0,1,13/16,14/16],1);//id==11
+	WEHOUGAME.mainstory.add(//Lv8
+		{mesh:WEHOUGAME.getBoss(0)},
+		[
+		{period:15,timeoffset:0,type:'line',linelong:30,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),target:new THREE.Vector2(-2000,20000),materialcut:[7/16,8/16],position:new THREE.Vector2(50,277),positionlock:false,positionrandom:new THREE.Vector2(300,0),palstance:[0.6],palstancerandom:0.8,lifetime:210,myevents:[[1000,'va',[0.75]],[1800,'va',[0.9]]]},
+		{period:15,timeoffset:5,type:'line',linelong:30,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),target:new THREE.Vector2(2000,20000),materialcut:[7/16,8/16],position:new THREE.Vector2(-50,-277),positionlock:false,positionrandom:new THREE.Vector2(300,0),palstance:[0.6],palstancerandom:0.8,lifetime:210,myevents:[[1000,'va',[0.75]],[1800,'va',[0.9]]]},
+		{period:15,timeoffset:10,type:'line',linelong:30,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),target:new THREE.Vector2(20000,-2000),materialcut:[7/16,8/16],position:new THREE.Vector2(-252,50),positionlock:false,positionrandom:new THREE.Vector2(0,300),palstance:[0.6],palstancerandom:0.8,lifetime:210,myevents:[[1000,'va',[0.75]],[1800,'va',[0.9]]]},
+		{period:15,timeoffset:15,type:'line',linelong:30,speed:[5],linematerial:WEHOUGAME.getBulletImg(1),target:new THREE.Vector2(20000,2000),materialcut:[7/16,8/16],position:new THREE.Vector2(252,-50),positionlock:false,positionrandom:new THREE.Vector2(0,300),palstance:[0.6],palstancerandom:0.8,lifetime:210,myevents:[[1000,'va',[0.75]],[1800,'va',[0.9]]]},
+		{distance:250,mesh:WEHOUGAME.getBullet(0),period:10000,lifetime:900,number:1,speed:[0],palstance:[2002],bulletevents:[['t',100,['bb',[5,0],0]]]},
+		{period:40,type:'laser',speed:[1000],mesh:WEHOUGAME.getBullet(9),appearline:60,lifetime:150,bulletevents:[['t',1,['v',0.0001,0]]]},
+		{distance:250,mesh:WEHOUGAME.getBullet(0),period:10000,lifetime:800,number:2,speed:[0],palstance:[2002],bulletevents:[['t',100,['bb',[7,0],0]]],timeoffset:900},
+		{period:40,type:'laser',speed:[1000],mesh:WEHOUGAME.getBullet(10),appearline:60,lifetime:150,bulletevents:[['t',1,['v',0.0001,0]]]},
+		{distance:250,mesh:WEHOUGAME.getBullet(0),period:10000,lifetime:800,number:2,speed:[0],palstance:[2002,1998],bulletevents:[['t',100,['bb',[9,0],0]],['t',540,['bb',[10,0],0]]],timeoffset:1700},
+		{period:50,type:'laser',speed:[1000],mesh:WEHOUGAME.getBullet(11),appearline:60,lifetime:120,bulletevents:[['t',1,['v',0.0001,0]]]},
+		{period:25,type:'laser',speed:[1000],mesh:WEHOUGAME.getBullet(11),appearline:40,lifetime:80,bulletevents:[['t',1,['v',0.0001,0]]]}
+		],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),50,new THREE.Vector2(0,0),new THREE.Vector2(0,0),3000,new THREE.Vector2(0,0),new THREE.Vector2(0,0),0],
+		[[],[0,1,2,3,4,6,8]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=60000,[8],[2,2600,0,"LvQED「永恒的宇宙之光」",6,['Laser Generator',0,0],7,[20000000,0.5]]]);
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),186,32,6,'ball',1,[6/16,0,0,1/16]);//id==12 clear
+	WEHOUGAME.mainstory.add(//ed
+		{mesh:WEHOUGAME.getBoss(0),slowx:2,slowy:2,player:'end'},
+		[{mesh:WEHOUGAME.getBullet(12),speed:[0],position:new THREE.Vector2(0,80)}],
+		[0,new THREE.Vector2(-9998,-9998),new THREE.Vector2(0,0),30,new THREE.Vector2(-50,-20),new THREE.Vector2(0,0),3000,new THREE.Vector2(0,0),new THREE.Vector2(0,0),0],
+		[[0],[]]
+	);
+	WEHOUGAME.mainstory.adds([lasttime+=2600,[9],[2,0,0,"",6,['',0,0],7,[0,1]]]);
+	WEHOUGAME.mainstory.adds([lasttime+=300,[],[9999,0]]);
+	//自机
+	WEHOUGAME.selfcont.add([]);
+}
+WEHOUGAME.intGame(document.getElementById("mygame"));
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+uniform sampler2D texture1;
+uniform float is;
+uniform float time;
+uniform vec2 uvb;
+uniform vec2 w;
+varying vec2 vUv;
+void main() {
+	vec2 tuv=vec2(vUv.x*w.x-w.x/2.0,vUv.y*w.y-w.y/2.0);
+	vec2 uv2=vec2(vUv.x,vUv.y);
+	float dis=200.0;
+	if(is>0.0){
+		dis=sqrt((tuv.x-uvb.x)*(tuv.x-uvb.x)+(tuv.y-uvb.y)*(tuv.y-uvb.y));
+		if(dis<140.0){
+			uv2.x=uv2.x+(tuv.x-uvb.x)/1000.0*(140.0-dis)/140.0*sin(time+uv2.x*10.0);
+			uv2.y=uv2.y+(tuv.y-uvb.y)/1000.0*(140.0-dis)/140.0*sin(time+uv2.y*10.0);
+		}
+	}
+	vec4 fc=texture2D( texture1, uv2 );
+	if(is>0.0&&dis<80.0){
+		fc.x=fc.x+(1.0-fc.x)*(80.0-dis)/1280.0;
+		fc.z=fc.z+(1.0-fc.z)*(80.0-dis)/840.0;
+	}
+	gl_FragColor = fc;
+}
+</script>
+<script id="vertexShader" type="x-shader/x-vertex">
+varying vec2 vUv;
+void main() {
+	vUv = uv;
+	gl_Position = vec4( position,250.0 );
+}
+</script>
+<script type="text/javascript">
+var camerapp,scenep,rendererp,timebg=0,nboss=new THREE.Vector2( -1.0, -1.0 ),uniforms;
+init2();
+function init2() {
+
+	dom=document.getElementById('canvas-bg');
+	width = dom.clientWidth;
+	height = dom.clientHeight;
+	rendererp=new THREE.WebGLRenderer({antialias:true});
+	rendererp.setSize(width, height);
+	dom.appendChild(rendererp.domElement);
+	rendererp.setClearColorHex(0x000000, 1.0)
+	
+	camerap = new THREE.PerspectiveCamera( 35,4/3, 1, 25000 );
+	camerap.position.set(0,-160,70);
+	
+	scenep = new THREE.Scene();
+	scenex = new THREE.Scene();
+	
+	camerax=new THREE.OrthographicCamera( -500, 500, 550, -550, -2000, 2000 );
+	camerax.position.x = 200;
+
+	var geometry = new THREE.PlaneGeometry(200,500,0,0);
+	var geometry2 = new THREE.PlaneGeometry(400,500,0,0);
+
+	var mytexbg1 = THREE.ImageUtils.loadTexture( 'img/stage01a.png' );
+	mytexbg1.anisotropy = rendererp.getMaxAnisotropy();
+	mytexbg1.wrapS = mytexbg1.wrapT = THREE.RepeatWrapping;
+	mytexbg1.repeat.set(2,5);
+	
+	var material1 = new THREE.MeshBasicMaterial( { map: mytexbg1 } );
+	material1.transparent=true;
+	material1.opacity=1;
+	material1.blending=THREE.AdditiveBlending;
+
+	mesh = new THREE.Mesh( geometry, material1 );
+	mesh.position.set(0,0,0)
+	
+	var mytexbg2 = THREE.ImageUtils.loadTexture( 'img/stage01b.png' );
+	mytexbg2.anisotropy = rendererp.getMaxAnisotropy();
+	mytexbg2.wrapS = mytexbg2.wrapT = THREE.RepeatWrapping;
+	mytexbg2.repeat.set(4,5);
+	
+	var material2 = new THREE.MeshBasicMaterial( { map: mytexbg2 } );
+	//
+	material2.transparent=true;
+	material2.opacity=0.3;
+	material2.blending=THREE.AdditiveBlending;
+	
+	mesh2 = new THREE.Mesh( geometry2, material2 );
+	mesh2.position.set(0,150,-50)
+	
+	var mytexbg3 = THREE.ImageUtils.loadTexture( 'img/stage01c.png' );
+	mytexbg3.anisotropy = rendererp.getMaxAnisotropy();
+	mytexbg3.wrapS = mytexbg3.wrapT = THREE.RepeatWrapping;
+	mytexbg3.repeat.set(8,10);
+	
+	var material3 = new THREE.MeshBasicMaterial( { map: mytexbg3 } );
+	material3.transparent=true;
+	material3.opacity=0.12;
+	material3.blending=THREE.AdditiveBlending;
+	
+	mesh3 = new THREE.Mesh( geometry2, material3 );
+	mesh3.position.set(0,50,-15)
+	mesh.add( mesh2 );
+	mesh.add( mesh3 );
+	scenep.add( mesh );
+	
+	//scenep.fog = new THREE.Fog(0x000000,10,200);
+	//scenep.fog.color.setHSV(197/255,83/255,50/255);
+	//
+	rtTexture = new THREE.WebGLRenderTarget(500,550, { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat } );
+	
+	uniforms={texture1:{type:'t',value:rtTexture},uvb:{type:'v2',value:nboss},is:{ type:'f',value:-1.0},w:{ type:'v2',value:new THREE.Vector2(WEHOUCORE.w,WEHOUCORE.h)},time:{ type:'f',value:0.0}};
+	materialx = new THREE.ShaderMaterial( {
+		uniforms:uniforms,
+		vertexShader:document.getElementById('vertexShader').innerHTML,
+		fragmentShader:document.getElementById('fragmentShader').innerHTML
+	} );
+	
+	mesh4 = new THREE.Mesh( new THREE.PlaneGeometry(500,550,0,0),materialx);//new THREE.MeshBasicMaterial( { map: rtTexture } ) );
+	scenex.add( mesh4 );
+}
+function animate2() {
+	requestAnimationFrame(animate2);
+	render2();
+}
+animate2();
+function render2() {
+	timebg++;
+	if(timebg%2==0){
+		var ww=WEHOUCORE.w/2+30,hh=WEHOUCORE.h/2+30;
+		if(WEHOUCORE.bspos[0].x>-ww&&WEHOUCORE.bspos[0].x<ww&&WEHOUCORE.bspos[0].y>-hh&&WEHOUCORE.bspos[0].y<hh){
+			uniforms.is.value=1.1;
+		}else{
+			uniforms.is.value=-1.1;
+		}
+		uniforms.time.value+=0.15;
+		nboss.x=WEHOUCORE.bspos[0].x;nboss.y=WEHOUCORE.bspos[0].y;
+		mesh.position.y-=0.5;
+		if(mesh.position.y<=-100){mesh.position.y=0}
+		camerap.position.x=Math.sin(timebg/100)*3+12;
+		camerap.lookAt({x:12,y:-100,z:0});
+		//rendererp.render( scenep, camerap );
+		rendererp.render( scenep, camerap, rtTexture, true );
+		rendererp.render( scenex, camerax );
+	}
+}
+</script>
+</html>

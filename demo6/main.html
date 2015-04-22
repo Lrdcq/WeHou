@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>秦心符卡复刻 - WEBGL弹幕游戏 - lrdcq.com</title>
+<script src="Three.WH.min.js"></script>
+<script src="stats.min.js"></script>
+<script src="audio.min.js"></script>
+<script src="WehouCore.js"></script>
+<script src="WehouGame.js"></script>
+</head>
+<body style="background:#ccc;background-image:url('img/bg.jpg');background-repeat:no-repeat;">
+<div id="mygame"style='position:fixed;top:25px;left:30px;'></div>
+</body>
+<script type="text/javascript">
+//帧频检测器
+stats=new Stats();
+stats.domElement.style.position='absolute';
+stats.domElement.style.bottom='0px';
+stats.domElement.style.zIndex=100;
+document.body.appendChild(stats.domElement);
+
+var vec2=function(x,y){
+	return new THREE.Vector2(x,y);
+}
+var vec3=function(x,y,z){
+	return new THREE.Vector3(x,y,z);
+}
+WEHOUGAME.bg={}
+WEHOUGAME.bg.renderer=new THREE.WebGLRenderer({antialias:true});
+WEHOUGAME.bg.renderer.setSize(WEHOUCORE.w,WEHOUCORE.h);
+WEHOUGAME.bg.bcamera=new THREE.PerspectiveCamera(45,5/5.5,1,25000);
+WEHOUGAME.bg.bscene=new THREE.Scene();
+</script>
+<script type="text/javascript">
+var B={};
+WEHOUGAME.userInt=function(){
+	WEHOUGAME.addMusic("bgm.ogg",1);
+	WEHOUGAME.addBulletImg(['img/bullet_1.png','img/sysimg_01.png'],1);
+	WEHOUGAME.addBulletImg(['img/bullet_1.png'],0);
+	WEHOUGAME.addBossImg(['img/boss.png']);
+	WEHOUGAME.addBoss(WEHOUGAME.getBossImg(0),128,128,[0,1/8,1,7/8],{
+	'normal':[128,0,0,0,1,0,8,2,0,16,3,0,24,4,0,32,5,0,40,6,0,48,7,0,56,0,1,64,1,1,72,2,1,80,3,1,88,4,1,96,5,1,104,6,1,112,7,1,120,0],//正常
+	'back':[8,0,2,0,0],//转身
+	'turn':[16,1,2,0,2,2,8,0],//前进
+	'unturn':[16,2,2,0,1,2,8,0],//后退
+	'run':[32,6,2,0,5,2,8,4,2,16,3,2,24,0],//飞行
+	'act_1':[120,0,3,0,1,3,10,2,3,20,0],//举手 
+	'act_1_2':[40,3,3,0,0],//举手 
+	'act_2':[32,4,3,0,5,3,8,6,3,16,7,3,24,0],//狼面俯冲
+	'act_3_1':[48,0,4,0,1,4,8,2,4,16,3,4,24,4,4,32,5,4,40,1],//狮面抬起-右
+	'act_3_2':[48,0,4,0,1,4,8,2,4,16,3,4,24,4,4,32,5,4,40,-1],//狮面抬起-左
+	'act_4_1':[35,0,5,0,1,5,7,2,5,14,3,5,21,4,5,28,1],//狮面-右
+	'act_4_2':[35,0,5,0,1,5,7,2,5,14,3,5,21,4,5,28,-1],//狮面-左
+	'act_5':[300,0,6,0,1,6,8,2,6,16,3,6,24,4,6,32,5,6,40,6,6,48,0],//忧面
+	'act_6':[40,7,4,0,7,5,8,6,5,16,5,5,24,1],//挥扇-右
+	'act_7':[40,7,4,0,7,5,8,6,5,16,5,5,24,-1],//挥扇-左
+	'act_x':[40,7,4,0,7,5,8,6,5,16,5,5,24,0],//
+	'act_8':[56,0,7,0,1,7,8,2,7,12,3,7,16,4,7,20,5,7,24,6,7,28,7,7,32,6,7,40,4,6,48,0],//挥扇-下
+	});
+	//故事
+	var lasttime=0;
+	var story=WEHOUGAME.mainstory;
+	//
+	story.setName('demo6_20141011_end');
+	//
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),16,64,0,'laser',1,[0,1/32,10/32,6/32]);//id==0  自机弹幕
+	/*loopfunction:function(t,i){t.l[i+3]*=0.8;this.bl.l[0].renew();}*/
+	story.add(//1入场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-500,300),vec2(0,0),
+		200,vec2(0,100),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:200,group:[0],act:[6,['Hata no kokoro',7,1,0],5,[WEHOUGAME.getMusic(0),0,290,1.23],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),84,84,16,'ball',1,[0/16,4/16,3/16,7/16]);//id=1 蓝色光玉
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),20,20,4,'ball',1,[5/16,6/16,13/16,14/16]);//id=2 蓝色小玉（光）
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),20,20,4,'ball',1,[3/16,4/16,13/16,14/16]);//id=3 深蓝色小玉（光）
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),20,20,4,'ball',1,[3/16,4/16,13/16,14/16]);//id=4 深蓝色小玉
+	story.add(//BOSS1符
+		{mesh:WEHOUGAME.getBoss(0),hit:2400,player:'sp',delmesh:false},
+		[
+		{lifetime:10,number:1,angle:[12],period:120,bossplay:['act_1']},
+		{mesh:WEHOUGAME.getBullet(3),lifetime:12,period:1,speed:[0]},
+		{mesh:WEHOUGAME.getBullet(4),speed:[3.5],number:24,angle:[15],anglerandom:15,speedrandom:2,period:1000,acceleration:[-0.05],bulletevents:[['t',30,['a',0,0]]],lifetime:500,outfield:true,birthse:2},
+		{mesh:WEHOUGAME.getBullet(1),lifetime:130,period:25,target:vec2(0,1000),anglerandom:30,palstance:[2.2],autopalstance:true,speed:[3],speedrandom:2,bulletevents:[['t',100,['a',0.12,0,'va',0.5,0]],['t',1,['bb',[4,0],0]],['t',2,['bb',[1,0],0]]],dieevents:[['bb',[2,0]]],birthse:1},
+		{mesh:WEHOUGAME.getBullet(2),lifetime:350,period:2000,number:10,angel:[36],speed:[20],palstance:[2003],bulletevents:[['t',1,['v',0,0]]],locked:true,diewithfather:true},
+		{mesh:WEHOUGAME.getBullet(1),lifetime:300,timeoffset:30,period:160,number:2,angle:[0],target:vec2(0,1000),palstance:[2002,1998,2002,1998],speed:[20],bulletevents:[['t',1,['v',1.2,0.4,'bb',[6,0],0]],['t',2,['bb',[1,0],0]]]},
+		{mesh:WEHOUGAME.getBullet(3),lifetime:350,period:2000,number:10,angel:[36],speed:[20],palstance:[2003],bulletevents:[['t',1,['v',0,0]]],locked:true,diewithfather:true}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		120,vec2(0,100),vec2(0,0),
+		280,vec2(0,100),vec2(0,0),
+		0],
+		[[0,3],[5]]
+	);
+	story.adds({time:2700,group:[1],act:[0,'忧符「浮世忧苦不绝于轮」',6,['Hata no kokoro',6,0,0],11,[0,vec3(30,-30,2)],2,2700,10,[0,[1,0],0,1],7,[100000,0.8,-12]]});
+	
+	story.add(//2场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,80),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[2],act:[0,'',6,['Hata no kokoro',6,0,0],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),36,36,5,'ball',4,[2/8,3/8,3/16,5/16]);//id=5 水蓝色炎弹
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),36,36,5,'ball',4,[2/8,3/8,7/16,9/16]);//id=6 蓝色炎弹
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),80,100,5,'ball',1,[12/16,16/16,6/16,11/16]);//id=7 忧面
+	story.add(//BOSS2符
+		{mesh:WEHOUGAME.getBoss(0),hit:1300,player:'sp',delmesh:false},
+		[
+		{mesh:WEHOUGAME.getBullet(5),position:vec2(0,-380),target:vec2(20000,1000),period:5,speed:[2],positionrandom:vec2(200,0),anglerandom:5,lifetime:80},
+		{mesh:WEHOUGAME.getBullet(6),position:vec2(0,-380),target:vec2(20000,1000),period:5,speed:[2],positionrandom:vec2(200,0),anglerandom:5,lifetime:80},
+		{mesh:WEHOUGAME.getBullet(5),position:vec2(0,-380),target:vec2(20000,1000),period:4,speed:[5],positionrandom:vec2(200,0),anglerandom:5,bulletevents:[['+y',275,['v',2,0,'t',WEHOUCORE.lmpos,vec2(800,0)]]],lifetime:500},
+		{mesh:WEHOUGAME.getBullet(6),position:vec2(0,-380),target:vec2(20000,1000),period:4,speed:[5],positionrandom:vec2(200,0),anglerandom:5,bulletevents:[['+y',275,['v',2,0,'t',WEHOUCORE.lmpos,vec2(800,0)]]],lifetime:500},
+		{lifetime:1,number:1,period:60,bossplay:['act_5']},
+		{mesh:WEHOUGAME.getBullet(7),position:vec2(30,-400),target:vec2(20000,1000),period:12,speed:[5],positionrandom:vec2(140,0),anglerandom:5,lifetime:130,bulletevents:[['nt',[40,0],['va',2,0]],['nt',[40,20],['va',-2,0]]],angleoffset:20}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		60,vec2(-9998,-9998),vec2(0,0),
+		300,vec2(-9998,80),vec2(0,0),
+		400,vec2(-9999,80),vec2(0,0),
+		0],
+		[[0,1,4],[2,3,5],[]]
+	);
+	story.adds({time:2700,group:[3],act:[0,'忧面「杞人忧地」',6,['Hata no kokoro',5,0,0],11,[0,vec3(30,-30,2)],2,2700,10,[0,[1,0],0,1],7,[120000,0.7,-12]]});
+	
+	story.add(//3场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,0),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[4],act:[0,'',6,['Hata no kokoro',5,0,0],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),150,150,50,'ball',1,[6/8,8/8,0/8,3/8]);//id=8 魔炮
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),8,800,0,'laser',1,[6/8,8/8,0/8,3/8]);//id=9 魔炮预警激光
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),36,36,5,'ball',4,[2/8,3/8,5/16,7/16]);//id=10 橙色炎弹
+	story.add(//BOSS3符
+		{mesh:WEHOUGAME.getBoss(0),hit:2100,player:'sp',delmesh:false},
+		[
+		{mesh:WEHOUGAME.getBullet(10),number:1,angle:[30],target:vec2(20000,1000),speed:[2],speedrandom:2,anglerandom:40,lifetime:320,period:1000,outfield:true,lifetime:360,bulletevents:[['t',280,['a',0.05,0]]]},
+		{mesh:WEHOUGAME.getBullet(10),number:2,angle:[15],target:vec2(-1000,20000),speed:[2],speedrandom:2,anglerandom:5,lifetime:320,period:1000,outfield:true,lifetime:360,bulletevents:[['t',280,['a',0.05,0]]]},
+		{mesh:WEHOUGAME.getBullet(10),number:2,angle:[15],target:vec2(1000,20000),speed:[2],speedrandom:2,anglerandom:5,lifetime:320,period:1000,outfield:true,lifetime:360,bulletevents:[['t',280,['a',0.05,0]]]},
+		{lifetime:1,number:1,period:34,bossplay:['act_4_1']},
+		{lifetime:1,number:1,period:34,bossplay:['act_4_2']},
+		{mesh:WEHOUGAME.getBullet(9),lifetime:50,number:1,period:48,bossplay:['act_3_1'],timeoffset:1,type:'laser',appearline:20,target:vec2(20000,-1000),speed:[800],bulletevents:[['t',1,['v',0.01,0]]],birthse:4},
+		{mesh:WEHOUGAME.getBullet(9),lifetime:50,number:1,period:48,bossplay:['act_3_2'],timeoffset:1,type:'laser',appearline:20,target:vec2(20000,-1000),speed:[800],bulletevents:[['t',1,['v',0.01,0]]],birthse:4},
+		{mesh:WEHOUGAME.getBullet(8),period:3,speed:[20],anglefactor:[5,6],lifetime:40,target:vec2(20000,-1000),anglechange:[0.7,70.7],cloudprotect:false,bulletevents:[['-y',-270,['bb',[0,0],0]],['+x',240,['bb',[1,0],0]]]},
+		{mesh:WEHOUGAME.getBullet(8),period:3,speed:[20],anglefactor:[-5,6],lifetime:40,target:vec2(20000,-1000),anglechange:[0.7,70.7],cloudprotect:false},
+		{mesh:WEHOUGAME.getBullet(8),period:3,speed:[20],anglefactor:[5,6],lifetime:40,target:vec2(20000,-1000),anglechange:[-0.7,-70.7],cloudprotect:false,bulletevents:[['-y',-270,['bb',[0,0],0]],['-x',-240,['bb',[2,0],0]]]},
+		{mesh:WEHOUGAME.getBullet(8),period:3,speed:[20],anglefactor:[-5,6],lifetime:40,target:vec2(20000,-1000),anglechange:[-0.7,-70.7],cloudprotect:false},
+		{lifetime:1,number:1,period:48,timeoffset:47,birthse:9}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		48,vec2(-130,150),vec2(0,0),
+		96,vec2(-130,150),vec2(0,0),
+		399,vec2(-130,150),vec2(0,0),
+		499,vec2(-130,150),vec2(0,0),
+		547,vec2(140,150),vec2(0,0),
+		595,vec2(140,150),vec2(0,0),
+		898,vec2(140,150),vec2(0,0),
+		998,vec2(140,150),vec2(0,0),
+		0],
+		[[],[5,11],[3,7,8],[],[],[6,11],[4,9,10],[]]
+	);
+	story.adds({time:3400,group:[5],act:[0,'喜符「昂扬的神乐狮子」',6,['Hata no kokoro',4,0,0],11,[0,vec3(30,-30,2)],2,3400,10,[0,[1,0],0,1],7,[150000,0.9,-12]]});
+	
+	story.add(//4场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,0),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[6],act:[0,'',6,['Hata no kokoro',4,0,0],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),48,48,8,'ball',1,[11/16+0.005,13/16-0.005,12/16,14/16]);//id=11 黄色椭玉
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),40,40,9,'ball',1,[11/16+0.005,13/16-0.005,16/16,14/16]);//id=12 黄色中玉
+	story.add(//BOSS4符
+		{mesh:WEHOUGAME.getBoss(0),hit:2300,player:'sp',delmesh:false},
+		[
+		{mesh:WEHOUGAME.getBullet(11),number:20,lifetime:20,speed:[20],speedchange:[20,120],numberchange:[6,36],period:5,bulletevents:[['t',1,['v',0.01,0,'va',0,180]],['t',2,['va',0,0]]],cloudprotect:false,birthse:10,seperiod:5},
+		{mesh:WEHOUGAME.getBullet(11),number:96,lifetime:320,speed:[160],period:200,bulletevents:[['t',1,['v',0.01,0,'va',0,180]],['t',2,['va',0,0,'a',0.01,0]]],timeoffset:0,outfield:true},
+		{mesh:WEHOUGAME.getBullet(11),number:128,lifetime:240,speed:[180],period:200,bulletevents:[['t',1,['v',0.01,0,'va',0,180]],['t',2,['va',0,0,'a',0.02,0]]],timeoffset:5,outfield:true},
+		{mesh:WEHOUGAME.getBullet(12),number:40,lifetime:320,speed:[2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4,2,2.5,3,3.5,4],angle:[0,0,0,0,45,0,0,0,0,45,0,0,0,0,45,0,0,0,0,45,0,0,0,0,45,0,0,0,0,45,0,0,0,0,45,0,0,0,0],period:200,timeoffset:150,outfield:true,angleoffset:22.5,cloudprotect:false},
+		{lifetime:1,number:1,period:35,bossplay:['act_1_2']}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		80,vec2(0,40),vec2(200,100),
+		115,vec2(-9998,-9998),vec2(0,0),
+		315,vec2(-9998,-9998),vec2(0,0),
+		0],
+		[[],[0,4],[1,2,3]]
+	);
+	story.adds({time:3400,group:[7],act:[0,'凭依「喜怒哀乐附体」',6,['Hata no kokoro',3,0,0],11,[0,vec3(30,-30,2)],2,3400,10,[0,[1,0],0,1],7,[170000,0.8,-12]]});
+	
+	story.add(//5场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,180),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[8],act:[0,'',6,['Hata no kokoro',3,0,0],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),200,300,50,'ball',1,[4/8,6/8,0/8,3/8]);//id=13 狼面
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),40,40,5,'ball',1,[0/16,2/16,1/16,3/16]);//id=14 蓝色刀弹
+	var flag5_target=vec2(0,180),flag5_vx=3.2,flag5_vy=-1.5;
+	story.add(//BOSS5符
+		{mesh:WEHOUGAME.getBoss(0),hit:2000,player:'sp',delmesh:false,slowx:
+		function(a,b,c,d){
+			var x=WEHOUCORE.bspos[0].x+flag5_vx;
+			if(x>275||x<-275){flag5_vx=-flag5_vx;flag5_target.x=x;flag5_target.y=WEHOUCORE.bspos[0].y;}
+			return x;
+		},slowy:
+		function(a,b,c,d){
+			var y=WEHOUCORE.bspos[0].y+flag5_vy;
+			if(y<-330){;y=330;flag5_target.x=WEHOUCORE.bspos[0].x;flag5_target.y=y}
+			return y;
+		}},
+		[
+		{target:flag5_target,mesh:WEHOUGAME.getBullet(14),number:2,angle:[140],speed:[4.5],acceleration:[-0.075],lifetime:480,period:5,bulletevents:[['t',59,['a',0,0,'v',0.001,0]],['t',200,['a',-0.07,0.04]],['t',250,['a',0,0]]]},
+		{mesh:WEHOUGAME.getBullet(13),speed:[-0.01],lifetime:20,period:3,target:flag5_target},
+		{lifetime:1,number:1,period:31,bossplay:['act_2']}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100000,vec2(-9999,-9999),vec2(0,0),
+		0],
+		[[0,1,2]]
+	);
+	story.adds({time:3500,group:[9],act:[0,'怒符「愤怒的忌狼之面」',6,['Hata no kokoro',2,0,0],11,[0,vec3(30,-30,2)],2,3500,10,[0,[1,0],0,1],7,[200000,0.7,-12]]});
+	
+	story.add(//6场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,120),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[10],act:[0,'',6,['Hata no kokoro',2,0,0],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),20,20,3,'ball',1,[7/16,6/16,11/16,12/16]);//id=15 蓝色米弹
+	story.add(//BOSS6符
+		{mesh:WEHOUGAME.getBoss(0),hit:5200,player:'sp',delmesh:false,kick_dis:40},
+		[
+		{mesh:WEHOUGAME.getBullet(15),distance:-20,speed:[-5],number:24,angle:[-180],outfield:true,period:7,lifetime:70,target:vec2(20000,-1000),numberrandom:6,cloudprotect:false},
+		{number:14,mesh:WEHOUGAME.getBullet(3),locked:true,speed:[0.8],palstance:[2000.6],period:10000,lifetime:350,bulletevents:[['t',150,['va',0,0]]],diewithfather:true},
+		{number:14,mesh:WEHOUGAME.getBullet(3),locked:true,speed:[0.8],palstance:[1999.4],period:10000,lifetime:350,bulletevents:[['t',150,['va',0,0]]],diewithfather:true},
+		{number:14,mesh:WEHOUGAME.getBullet(3),locked:true,speed:[0.8],period:10000,lifetime:350,diewithfather:true},
+		{mesh:WEHOUGAME.getBullet(1),number:5,angle:[20],target:vec2(20000,-1000),angleoffset:-40,numberchange:[1.5,100],anglesizechange:[-1.5,-200],speed:[6],acceleration:[-0.1],bulletevents:[['t',59,['a',0,0,'v',0.001,0]],['t',150,['a',0.05,0]],['t',220,['a',0,0]],['t',1,['bb',[1,0],0]]],timeoffset:30,period:100,lifetime:350,cloudprotect:false},
+		{mesh:WEHOUGAME.getBullet(1),number:5,angle:[20],target:vec2(20000,-1000),angleoffset:40,numberchange:[1.5,100],anglesizechange:[-1.5,-200],speed:[6],acceleration:[-0.1],bulletevents:[['t',59,['a',0,0,'v',0.001,0]],['t',150,['a',0.05,0]],['t',220,['a',0,0]],['t',1,['bb',[2,0],0]]],timeoffset:20,period:100,lifetime:350,cloudprotect:false},
+		{mesh:WEHOUGAME.getBullet(1),number:12,angle:[20],target:vec2(20000,-1000),angleoffset:0,numberchange:[1.5,100],anglesizechange:[-1.5,-200],speed:[6],acceleration:[-0.1],bulletevents:[['t',59,['a',0,0,'v',0.001,0]],['t',150,['a',0.05,0]],['t',220,['a',0,0]],['t',1,['bb',[3,0],0]]],timeoffset:30,period:200,lifetime:350,cloudprotect:false},
+		{lifetime:1,number:1,period:100,bossplay:['act_7'],birthse:10},
+		{lifetime:1,number:1,period:100,bossplay:['act_6'],birthse:10},
+		{lifetime:1,number:1,period:200,bossplay:['act_8'],birthse:10}
+		
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,120),vec2(0,0),//左
+		200,vec2(0,120),vec2(0,0),//右
+		400,vec2(0,120),vec2(0,0),//旋转
+		500,vec2(0,120),vec2(0,0),//左
+		600,vec2(0,120),vec2(0,0),//右
+		800,vec2(0,120),vec2(0,0),//旋转
+		0],
+		[[4,7,0],[5,8,0],[6,9,0],[5,8,0],[4,7,0],[6,9,0]]
+	);
+	story.adds({time:3600,group:[11],act:[0,'「猿猴凭依」',6,['Hata no kokoro',1,0,0],11,[0,vec3(30,-30,2)],2,3600,10,[0,[1,0],0,1],7,[300000,0.8,-12]]});
+	
+	story.add(//7场
+		{mesh:WEHOUGAME.getBoss(0),hit:300000,delmesh:false,kick_dis:0},
+		[],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(0,0),vec2(0,0),
+		0],
+		[[]]
+	);
+	story.adds({time:100,group:[12],act:[0,'',6,['Hata no kokoro',1,0,1],7,[0,0,-10]]});
+	
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),20,20,3,'ball',1,[0/16,1/16,11/16,12/16]);//id=16 黑色米弹
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),40,40,9,'ball',1,[7/16+0.005,9/16-0.005,16/16,14/16]);//id=17 黑色中玉
+	story.add(//BOSS7符
+		{mesh:WEHOUGAME.getBoss(0),hit:1200,player:'onting',delmesh:false,loopfunction:
+		function(t,i){
+			if(t.l[3]>60){
+				t.l[3]-=12;
+				t.l[6]=t.l[3]+1;
+			}
+			WEHOUGAME.mainstory.effect.push(2,vec2(0,0));
+			this.bl.l[0].renew();
+			this.bl.l[1].renew();
+			this.bl.l[2].renew();
+		}},
+		[
+		{lifetime:50,number:1,period:300,bossplay:['act_x'],bulletevents:[['t',10,['bb',[1,0],0]],['t',29,['bb',[2,0],0]],['t',48,['bb',[3,0],0]]],speed:[0.0001],birthse:1},
+		{mesh:WEHOUGAME.getBullet(16),period:1,anglechange:[12,300],angle:[0,10,0],number:4,angleoffset:-70,speed:[3,4,3,4],acceleration:[-0.03,-0.04,-0.03,-0.04],bulletevents:[['t',85,['a',0,0]]],lifetime:1000,outfield:true,target:vec2(30000,30000)},
+		{mesh:WEHOUGAME.getBullet(16),period:1,anglechange:[-12,-300],angle:[0,10,0],number:4,angleoffset:70,speed:[3,4,3,4],acceleration:[-0.03,-0.04,-0.03,-0.04],bulletevents:[['t',85,['a',0,0]]],lifetime:1000,outfield:true,target:vec2(30000,30000)},
+		{mesh:WEHOUGAME.getBullet(17),lifetime:1000,outfield:true,number:5,angle:[30],period:8,bulletevents:[['t',85,['a',0,0]]],speed:[6],acceleration:[-0.06],cloudprotect:false}
+		],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		200,vec2(-9998,-9998),vec2(0,0),
+		201,vec2(-9999,-9999),vec2(0,0),
+		0],
+		[[0],[]]
+	);
+	story.adds({time:1760,group:[13],act:[0,'「假面丧心舞 暗黑能乐」',11,[1,vec3(-20,-25,2)],2,1760,7,[500000,0.6,-1],12,0],circleclear:true,bt:true});
+	
+	story.add(//结束区间
+		{mesh:WEHOUGAME.getBoss(0),delmesh:false,player:'onting'},
+		[{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),128,128,0,'ball',1,[8/16,9/16,15/16,1])),number:32,speed:[5],period:1000,rotating:2,speedrandom:5,birthse:8}],
+		[0,vec2(-9998,-9998),vec2(0,0),
+		100,vec2(-9998,-9998),vec2(30,30),//
+		0],
+		[[0]]
+	);
+	story.adds({time:100,group:[14],act:[0,'',7,[0,0,-10]],bt:true});
+	
+	story.adds({time:10,act:[9999,0]});
+	//自机
+	story.self.add([
+		{mesh:WEHOUGAME.getBullet(0),speed:[20],period:3,target:vec2(20000,1000),position:vec2(9,18),lifetime:41,type:'self',damage:4,likelaser:true},
+		{mesh:WEHOUGAME.getBullet(0),speed:[20],period:3,target:vec2(20000,1000),position:vec2(-9,18),lifetime:41,type:'self',damage:4,likelaser:true}
+	]);
+	
+	//story.p=10
+}
+WEHOUGAME.intEffect=function(){
+	WEHOUGAME.mainstory.effect.add([
+		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(2),800,800,0,'ball',1,[0/16,1/16,15/16,16/16])),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:50,valpha:-0.02,size:vec2(1,1)}
+	]);
+}
+WEHOUGAME.intGame(document.getElementById("mygame"));
+</script>
+</html>
