@@ -719,6 +719,7 @@ WEHOUCORE.Bb1=function(parent,z){
 	this.ballbox=new Array();
 	this.event=z.bulletevents||[]//弹幕事件;
 	this.myeve=z.myevents||[]//发射器事件
+	this.myeve2=z.mybulevents||[];//发射器影响弹幕事件
 	this.deve=z.dieevents||[]//死亡事件;
 	this.se=z.birthse||0;//发生音效
 	this.secount=0;
@@ -889,21 +890,118 @@ WEHOUCORE.Bb1.prototype.bread = function(al) {
 			if((this.ae2[0]>0&&this.aall[3]>this.ae2[1])||(this.ae2[0]<0&&this.aall[3]<this.ae2[1])){this.aall[3]=0}
 		}
 	}
-	//弹幕生成器事件
-	for(l=0;l<this.myeve.length;l++){
-		if(this.ot==this.myeve[l][0]){
-			if(this.myeve[l][1]=='t'){
-				this.t.x=this.myeve[l][2].x;this.t.y=this.myeve[l][2].y;
-				if(this.t.x==29999&&this.t.y==29999){this.t.x=WEHOUCORE.lmpos.x;this.t.y=WEHOUCORE.lmpos.y;}
+	return 11;
+}
+WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
+	var ge=parm,m;
+	for(m=0;m<ge.length;m+=3){
+		if(ge[m]=="a"){
+			if(this.motion=='normal'){
+				tz.a=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
+			}else if(this.motion=='gravity'){
+				tz.a.x=ge[m+1].x;tz.a.y=ge[m+1].y;
 			}else{
-				this[this.myeve[l][1]]=this.myeve[l][2];
+				tz.a=ge[m+1];
+			}
+		}else if(ge[m]=="v"){
+			if(this.motion=='normal'){
+				tz.v=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
+			}else if(this.motion=='gravity'){
+				if(ge[m+1].x){
+					tz.v.x=ge[m+1].x;tz.v.y=ge[m+1].y;
+				}else{
+					var tx=tz.t;
+					var ds=Math.sqrt(tx.x*tx.x+tx.y*tx.y);
+					tz.v.x=tx.x*ge[m+1]/ds;
+					tz.v.y=tx.y*ge[m+1]/ds;
+				}
+			}else{
+				tz.v=ge[m+1];
+			}
+		}else if(ge[m]=="va"){tz.va=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;}
+		else if(ge[m]=="t"){
+			tz.t=ge[m+1].clone();
+			if(tz.t.x>=10000){if(tz.t.x==29999){tz.t.x=tz.ms.position.x+WEHOUCORE.lmpos.x-tz.bp.x;}else{tz.t.x=tz.ms.position.x+tz.t.x-20000;}}
+			if(tz.t.y>=10000){if(tz.t.y==29999){tz.t.y=tz.ms.position.y+WEHOUCORE.lmpos.y-tz.bp.y;}else{tz.t.y=tz.ms.position.y+tz.t.y-20000;}}
+			tz.bp.x=tz.ms.position.x;tz.bp.y=tz.ms.position.y;
+			ge[m+2].x?(tz.t.x+=+WEHOUCORE.random()*ge[m+2].x-ge[m+2].x/2):0;
+			ge[m+2].y?(tz.t.y+=+WEHOUCORE.random()*ge[m+2].y-ge[m+2].y/2):0;
+			tz.t.sub(tz.t,tz.ms.position);
+			var ds=Math.sqrt((tz.t.x)*(tz.t.x)+(tz.t.y)*(tz.t.y));
+			tz.t.x=(tz.t.x)*tz.tdis/ds+tz.ms.position.x;
+			tz.t.y=(tz.t.y)*tz.tdis/ds+tz.ms.position.y;
+		}else if(ge[m]=="ms"){
+			var p=tz.ms.position.clone();
+			WEHOUCORE.webgl.scene.remove(tz.ms);
+			tz.ms.deallocate();
+			tz.ms=ge[m+1].clone();
+			tz.ms.position=p;
+			WEHOUCORE.webgl.scene.add(tz.ms);
+			//tz.ms.material=ge[m+1].material;
+			
+		}else if(ge[m]=="bb"){
+			if(ge[m+1]){
+				tz.bb=[ge[m+1][0],ge[m+1][1]];
+				this.parent.l[tz.bb[0]].p.x=tz.ms.position.x;
+				this.parent.l[tz.bb[0]].p.y=tz.ms.position.y;
+				if(ge[m+2]){
+					tz.bb[2]=ge[m+2];
+				}
+			}else{
+				tz.bb=0;
+			}
+		}else if(ge[m]=="cp"){
+			if(tz.parentball){
+				tz[ge[m+1]]=tz.parentball[ge[m+1]];
+			}
+		}else if(ge[m]=="p"){
+			if(ge[m+1].x!=29999){tz.ms.position.x=ge[m+1].x;}
+			if(ge[m+1].y!=29999){tz.ms.position.y=ge[m+1].y;}
+		}else if(ge[m]=="-x"){
+			if(!tz.gx){
+				if(this.event[l][0]=='+x'||this.event[l][0]=='-x'){
+					tz.ms.position.x=this.event[l][1]*2-tz.ms.position.x;
+					tz.t.x=2*this.event[l][1]-tz.t.x;
+					tz.bp.x=2*this.event[l][1]-tz.bp.x;
+				}else{
+					tz.t.x=2*tz.ms.position.x-tz.t.x;
+					tz.bp.x=2*tz.ms.position.x-tz.bp.x;
+				}
+				tz.gx=1;
+			}
+		}else if(ge[m]=="-y"){
+			if(!tz.gy){
+				if(this.event[l][0]=='+y'||this.event[l][0]=='-y'){
+					tz.ms.position.y=this.event[l][1]*2-tz.ms.position.y;
+					tz.t.y=2*this.event[l][1]-tz.t.y;
+					tz.bp.y=2*this.event[l][1]-tz.bp.y;
+				}else{
+					tz.t.y=2*tz.ms.position.y-tz.t.y;
+					tz.bp.y=2*tz.ms.position.y-tz.bp.y;
+				}
+				tz.gy=1;
+			}
+		}else if(ge[m]=="jumpnext"){
+			WEHOUCORE.nowstory.storyCT('jumpnext');
+		}else if(ge[m]=="se"){
+			WEHOUCORE.nowstory.seplay(ge[m+1]-1);
+		}else if(ge[m]=="die"){
+			tz.btime=this.bt-1;
+		}else{
+			tz[ge[m]]=ge[m+1];
+			//alert(tz.btime)
+		}
+	}
+}
+WEHOUCORE.Bb1.prototype.going=function(zp){
+	for(l=0;l<this.myeve2.length;l++){
+		if(this.ot==this.myeve2[l][0]){
+			for(var i=0;i<this.ballbox.length;i++){
+				this.eventer(this.ballbox[i],this.myeve2[l][1]);
 			}
 		}
 	}
-	this.ot++;
-	return 11;
-}
-WEHOUCORE.Bb1.prototype.going=function(zp){
+	//
 	for(var i=0;i<this.ballbox.length;i++){
 		var tz=this.ballbox[i];
 		if(tz.btime<this.bt){
@@ -933,104 +1031,7 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 				this.event[l][0]=='ft'?tz.parentball.btime==this.event[l][1]:
 				0){
 					var ge=this.event[l][2];
-					for(m=0;m<ge.length;m+=3){
-						if(ge[m]=="a"){
-							if(this.motion=='normal'){
-								tz.a=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
-							}else if(this.motion=='gravity'){
-								tz.a.x=ge[m+1].x;tz.a.y=ge[m+1].y;
-							}else{
-								tz.a=ge[m+1];
-							}
-						}else if(ge[m]=="v"){
-							if(this.motion=='normal'){
-								tz.v=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
-							}else if(this.motion=='gravity'){
-								if(ge[m+1].x){
-									tz.v.x=ge[m+1].x;tz.v.y=ge[m+1].y;
-								}else{
-									var tx=tz.t;
-									var ds=Math.sqrt(tx.x*tx.x+tx.y*tx.y);
-									tz.v.x=tx.x*ge[m+1]/ds;
-									tz.v.y=tx.y*ge[m+1]/ds;
-								}
-							}else{
-								tz.v=ge[m+1];
-							}
-						}else if(ge[m]=="va"){tz.va=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;}
-						else if(ge[m]=="t"){
-							tz.t=ge[m+1].clone();
-							if(tz.t.x>=10000){if(tz.t.x==29999){tz.t.x=tz.ms.position.x+WEHOUCORE.lmpos.x-tz.bp.x;}else{tz.t.x=tz.ms.position.x+tz.t.x-20000;}}
-							if(tz.t.y>=10000){if(tz.t.y==29999){tz.t.y=tz.ms.position.y+WEHOUCORE.lmpos.y-tz.bp.y;}else{tz.t.y=tz.ms.position.y+tz.t.y-20000;}}
-							tz.bp.x=tz.ms.position.x;tz.bp.y=tz.ms.position.y;
-							ge[m+2].x?(tz.t.x+=+WEHOUCORE.random()*ge[m+2].x-ge[m+2].x/2):0;
-							ge[m+2].y?(tz.t.y+=+WEHOUCORE.random()*ge[m+2].y-ge[m+2].y/2):0;
-							tz.t.sub(tz.t,tz.ms.position);
-							var ds=Math.sqrt((tz.t.x)*(tz.t.x)+(tz.t.y)*(tz.t.y));
-							tz.t.x=(tz.t.x)*tz.tdis/ds+tz.ms.position.x;
-							tz.t.y=(tz.t.y)*tz.tdis/ds+tz.ms.position.y;
-						}else if(ge[m]=="ms"){
-							var p=tz.ms.position.clone();
-							WEHOUCORE.webgl.scene.remove(tz.ms);
-							tz.ms.deallocate();
-							tz.ms=ge[m+1].clone();
-							tz.ms.position=p;
-							WEHOUCORE.webgl.scene.add(tz.ms);
-							//tz.ms.material=ge[m+1].material;
-							
-						}else if(ge[m]=="bb"){
-							if(ge[m+1]){
-								tz.bb=[ge[m+1][0],ge[m+1][1]];
-								this.parent.l[tz.bb[0]].p.x=tz.ms.position.x;
-								this.parent.l[tz.bb[0]].p.y=tz.ms.position.y;
-								if(ge[m+2]){
-									tz.bb[2]=ge[m+2];
-								}
-							}else{
-								tz.bb=0;
-							}
-						}else if(ge[m]=="cp"){
-							if(tz.parentball){
-								tz[ge[m+1]]=tz.parentball[ge[m+1]];
-							}
-						}else if(ge[m]=="p"){
-							if(ge[m+1].x!=29999){tz.ms.position.x=ge[m+1].x;}
-							if(ge[m+1].y!=29999){tz.ms.position.y=ge[m+1].y;}
-						}else if(ge[m]=="-x"){
-							if(!tz.gx){
-								if(this.event[l][0]=='+x'||this.event[l][0]=='-x'){
-									tz.ms.position.x=this.event[l][1]*2-tz.ms.position.x;
-									tz.t.x=2*this.event[l][1]-tz.t.x;
-									tz.bp.x=2*this.event[l][1]-tz.bp.x;
-								}else{
-									tz.t.x=2*tz.ms.position.x-tz.t.x;
-									tz.bp.x=2*tz.ms.position.x-tz.bp.x;
-								}
-								tz.gx=1;
-							}
-						}else if(ge[m]=="-y"){
-							if(!tz.gy){
-								if(this.event[l][0]=='+y'||this.event[l][0]=='-y'){
-									tz.ms.position.y=this.event[l][1]*2-tz.ms.position.y;
-									tz.t.y=2*this.event[l][1]-tz.t.y;
-									tz.bp.y=2*this.event[l][1]-tz.bp.y;
-								}else{
-									tz.t.y=2*tz.ms.position.y-tz.t.y;
-									tz.bp.y=2*tz.ms.position.y-tz.bp.y;
-								}
-								tz.gy=1;
-							}
-						}else if(ge[m]=="jumpnext"){
-							WEHOUCORE.nowstory.storyCT('jumpnext');
-						}else if(ge[m]=="se"){
-							WEHOUCORE.nowstory.seplay(ge[m+1]-1);
-						}else if(ge[m]=="die"){
-							tz.btime=this.bt-1;
-						}else{
-							tz[ge[m]]=ge[m+1];
-							//alert(tz.btime)
-						}
-					}
+					this.eventer(tz,ge);
 				}
 			}
 			//event end
@@ -1335,6 +1336,18 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 			break;
 		}
 	}
+	//弹幕生成器事件
+	for(l=0;l<this.myeve.length;l++){
+		if(this.ot==this.myeve[l][0]){
+			if(this.myeve[l][1]=='t'){
+				this.t.x=this.myeve[l][2].x;this.t.y=this.myeve[l][2].y;
+				if(this.t.x==29999&&this.t.y==29999){this.t.x=WEHOUCORE.lmpos.x;this.t.y=WEHOUCORE.lmpos.y;}
+			}else{
+				this[this.myeve[l][1]]=this.myeve[l][2];
+			}
+		}
+	}
+	this.ot++;
 	return 22;
 }
 WEHOUCORE.Bb1.prototype.clear = function(p,dis,per) {//位置 距离 百分比
