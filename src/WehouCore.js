@@ -33,9 +33,9 @@ WEHOUCORE.regimg=function(name){
 	return name;
 }
 WEHOUCORE.zcount=2;
-WEHOUCORE.zcounter=function(z){
+WEHOUCORE.zcounter=function(z,b){
 	if(z){WEHOUCORE.zcount=z;}
-	else{WEHOUCORE.zcount+=1;}
+	else{WEHOUCORE.zcount+=b?b:1;}
 	return WEHOUCORE.zcount;
 }
 WEHOUCORE.random=function(){
@@ -92,6 +92,18 @@ WEHOUCORE.p2l=function(p,n1,n2,d){
 		return ds;
 	}
 }
+WEHOUCORE.mirror=function(a,n1,n2,b){
+	var k1=(n2.y-n1.y)/(n2.x-n1.x+0.0000001);
+	var k2=-1/k1;
+	var x=(n1.y-a.y-(k1*n1.x-k2*a.x))/(k2-k1);
+	var y=k1*(x-n1.x)+n1.y;
+	if(b){
+		b.x=2*x-a.x;
+		b.y=2*y-a.y;
+	}else{
+		return new THREE.Vector2(2*x-2*a.x,2*y-2*a.y);
+	}
+}
 WEHOUCORE.slowmove=[];
 WEHOUCORE.slowmove[0]=function(t,b,c,d){//缓进缓出
 	if ((t/=d/2) < 1) return c/2*t*t*t + b;
@@ -106,6 +118,36 @@ WEHOUCORE.slowmove[2]=function(t,b,c,d){//缓出
 WEHOUCORE.slowmove[3]=function(t,b,c,d,s){//折返出
 	if (s == undefined) s = 1.70158;
 	return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+}
+//
+WEHOUCORE.ballTest=function(mesh,meshlist,dis){
+	var pos=mesh.me.position;
+	var len=meshlist.length;
+	var flag=false;
+	for(var i=0;i<len;i++){
+		if((!meshlist[i].hited)&&WEHOUCORE.p2p(pos,meshlist[i].ms.position,dis,1)){
+			meshlist[i].hited=1;
+			flag=true;
+		}
+	}
+	return flag;
+}
+WEHOUCORE.laserTest=function(ms,long,meshlist,dis){
+	var len=meshlist.length;
+	var n1=WEHOUCORE.a2a(new THREE.Vector2(0,-long*ms.scale.y+ms.geometry.d+20),ms.rotation.z);
+	var n2=WEHOUCORE.a2a(new THREE.Vector2(0,-ms.geometry.d-20),ms.rotation.z);
+	var n3=new THREE.Vector2(ms.position.x+n1.x,ms.position.y+n1.y);
+	var n4=new THREE.Vector2(ms.position.x+n2.x,ms.position.y+n2.y);
+	var flag=false;
+	for(var i=0;i<len;i++){
+		if((!meshlist[i].hited)&&WEHOUCORE.p2l(meshlist[i].ms.position,n3,n4,dis)){
+			meshlist[i].hited=1;
+			meshlist[i].hited_n1=n3;
+			meshlist[i].hited_n2=n4;
+			flag=true;
+		}
+	}
+	return flag;
 }
 //
 WEHOUCORE.canvas2mesh=function(canvas,w,h,opt){
@@ -231,9 +273,9 @@ WEHOUCORE.planeSet.prototype.add=function(w,h,img,z){
 WEHOUCORE.bberSet=function(){
 	this.l=new Array();
 }
-WEHOUCORE.bberSet.prototype.add=function(parent,zz,x){
+WEHOUCORE.bberSet.prototype.add=function(zz,x){
 	var gox=x||1;
-	this.l.push(new WEHOUCORE['Bb'+gox](parent,zz));
+	this.l.push(new WEHOUCORE['Bb'+gox](this,zz));
 }
 //敌方轨迹集合
 WEHOUCORE.lineSet=function(ms,bl){
@@ -298,7 +340,7 @@ WEHOUCORE.lineSet.prototype.gogogo=function(bx,isb){
 				var nowx=(typeof this.slx==="function")?this.slx(this.times-this.l[i-3],this.lt.x,this.t.x-this.lt.x,this.l[i]-this.l[i-3]):WEHOUCORE.slowmove[this.slx](this.times-this.l[i-3],this.lt.x,this.t.x-this.lt.x,this.l[i]-this.l[i-3]);
 				var nowy=(typeof this.sly==="function")?this.sly(this.times-this.l[i-3],this.lt.y,this.t.y-this.lt.y,this.l[i]-this.l[i-3]):WEHOUCORE.slowmove[this.sly](this.times-this.l[i-3],this.lt.y,this.t.y-this.lt.y,this.l[i]-this.l[i-3]);
 				gox=nowx-this.ms.position.x;goy=nowy-this.ms.position.y;
-				this.ms.position.set(nowx,nowy,WEHOUCORE.zcounter());
+				this.ms.position.set(nowx,nowy,WEHOUCORE.zcounter(0,1000));
 				WEHOUCORE.bspos[bx].x=nowx;WEHOUCORE.bspos[bx].y=nowy;
 				for(var j=0;j<t.length;j++){
 					this.bl.l[t[j]].p.x=this.bl.l[t[j]].pl?this.bl.l[t[j]].gp.x+nowx:(this.bl.l[t[j]].gp.x>10000?this.bl.l[t[j]].gp.x-20000+WEHOUCORE.lmpos.x:this.bl.l[t[j]].gp.x);
@@ -360,7 +402,7 @@ WEHOUCORE.selfSet=function(){
 WEHOUCORE.selfSet.prototype.add=function(z2){
 	var myberlist=new WEHOUCORE.bberSet();
 	for(var i=0;i<z2.length;i++){
-		myberlist.add(myberlist,z2[i]);
+		myberlist.add(z2[i]);
 	}
 	this.l.push(myberlist);
 }
@@ -395,7 +437,7 @@ WEHOUCORE.effectSet=function(){
 }
 WEHOUCORE.effectSet.prototype.add=function(z2){
 	for(var i=0;i<z2.length;i++){
-		this.l.add(this.l,z2[i],2);
+		this.l.add(z2[i],2);
 	}
 }
 WEHOUCORE.effectSet.prototype.push=function(id,d){
@@ -425,7 +467,7 @@ WEHOUCORE.itemSet=function(){
 }
 WEHOUCORE.itemSet.prototype.add=function(z2){
 	for(var i=0;i<z2.length;i++){
-		this.l.add(this.l,z2[i],3);
+		this.l.add(z2[i],3);
 	}
 }
 WEHOUCORE.itemSet.prototype.push=function(list){
@@ -466,7 +508,7 @@ WEHOUCORE.storySet.prototype.setName=function(n){
 WEHOUCORE.storySet.prototype.add=function(z1,z2,z3,z4){
 	var myberlist=new WEHOUCORE.bberSet();
 	for(var i=0;i<z2.length;i++){
-		myberlist.add(myberlist,z2[i]);
+		myberlist.add(z2[i]);
 	}
 	var mylinlist=new WEHOUCORE.lineSet(z1,myberlist);
 	mylinlist.addline(z3);
@@ -892,10 +934,11 @@ WEHOUCORE.Bb1.prototype.bread = function(al) {
 	}
 	return 11;
 }
-WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
+WEHOUCORE.Bb1.prototype.eventer=function(tz,parm,l){
 	var ge=parm,m;
 	for(m=0;m<ge.length;m+=3){
-		if(ge[m]=="a"){
+		switch(ge[m]){
+		case "a":
 			if(this.motion=='normal'){
 				tz.a=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
 			}else if(this.motion=='gravity'){
@@ -903,7 +946,8 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 			}else{
 				tz.a=ge[m+1];
 			}
-		}else if(ge[m]=="v"){
+			break;
+		case "v":
 			if(this.motion=='normal'){
 				tz.v=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
 			}else if(this.motion=='gravity'){
@@ -918,19 +962,37 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 			}else{
 				tz.v=ge[m+1];
 			}
-		}else if(ge[m]=="va"){tz.va=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;}
-		else if(ge[m]=="t"){
+			break;
+		case "va":
+			tz.va=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
+			break;
+		case "t":
 			tz.t=ge[m+1].clone();
-			if(tz.t.x>=10000){if(tz.t.x==29999){tz.t.x=tz.ms.position.x+WEHOUCORE.lmpos.x-tz.bp.x;}else{tz.t.x=tz.ms.position.x+tz.t.x-20000;}}
-			if(tz.t.y>=10000){if(tz.t.y==29999){tz.t.y=tz.ms.position.y+WEHOUCORE.lmpos.y-tz.bp.y;}else{tz.t.y=tz.ms.position.y+tz.t.y-20000;}}
-			tz.bp.x=tz.ms.position.x;tz.bp.y=tz.ms.position.y;
+			if(tz.t.x>=10000){
+				if(tz.t.x==29999){
+					tz.t.x=tz.ms.position.x+WEHOUCORE.lmpos.x-tz.bp.x;
+				}else{
+					tz.t.x=tz.ms.position.x+tz.t.x-20000;
+				}
+			}
+			if(tz.t.y>=10000){
+				if(tz.t.y==29999){
+					tz.t.y=tz.ms.position.y+WEHOUCORE.lmpos.y-tz.bp.y;
+				}else{
+					tz.t.y=tz.ms.position.y+tz.t.y-20000;
+				}
+			}
+			if(ge[m+1].x!=29999){
+				tz.bp.x=tz.ms.position.x;tz.bp.y=tz.ms.position.y;
+			}
 			ge[m+2].x?(tz.t.x+=+WEHOUCORE.random()*ge[m+2].x-ge[m+2].x/2):0;
 			ge[m+2].y?(tz.t.y+=+WEHOUCORE.random()*ge[m+2].y-ge[m+2].y/2):0;
 			tz.t.sub(tz.t,tz.ms.position);
 			var ds=Math.sqrt((tz.t.x)*(tz.t.x)+(tz.t.y)*(tz.t.y));
 			tz.t.x=(tz.t.x)*tz.tdis/ds+tz.ms.position.x;
 			tz.t.y=(tz.t.y)*tz.tdis/ds+tz.ms.position.y;
-		}else if(ge[m]=="ms"){
+			break;
+		case "ms":
 			var p=tz.ms.position.clone();
 			WEHOUCORE.webgl.scene.remove(tz.ms);
 			tz.ms.deallocate();
@@ -938,8 +1000,8 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 			tz.ms.position=p;
 			WEHOUCORE.webgl.scene.add(tz.ms);
 			//tz.ms.material=ge[m+1].material;
-			
-		}else if(ge[m]=="bb"){
+			break;
+		case "bb":
 			if(ge[m+1]){
 				tz.bb=[ge[m+1][0],ge[m+1][1]];
 				this.parent.l[tz.bb[0]].p.x=tz.ms.position.x;
@@ -950,15 +1012,18 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 			}else{
 				tz.bb=0;
 			}
-		}else if(ge[m]=="cp"){
+			break;
+		case "cp":
 			if(tz.parentball){
 				tz[ge[m+1]]=tz.parentball[ge[m+1]];
 			}
-		}else if(ge[m]=="p"){
+			break;
+		case "p":
 			if(ge[m+1].x!=29999){tz.ms.position.x=ge[m+1].x;}
 			if(ge[m+1].y!=29999){tz.ms.position.y=ge[m+1].y;}
-		}else if(ge[m]=="-x"){
-			if(!tz.gx){
+			break;
+		case "-x":
+			if((!tz.gx)||(tz.btime-tz.gx>8)){
 				if(this.event[l][0]=='+x'||this.event[l][0]=='-x'){
 					tz.ms.position.x=this.event[l][1]*2-tz.ms.position.x;
 					tz.t.x=2*this.event[l][1]-tz.t.x;
@@ -967,10 +1032,11 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 					tz.t.x=2*tz.ms.position.x-tz.t.x;
 					tz.bp.x=2*tz.ms.position.x-tz.bp.x;
 				}
-				tz.gx=1;
+				tz.gx=tz.btime;
 			}
-		}else if(ge[m]=="-y"){
-			if(!tz.gy){
+			break;
+		case "-y":
+			if((!tz.gy)||(tz.btime-tz.gy>8)){
 				if(this.event[l][0]=='+y'||this.event[l][0]=='-y'){
 					tz.ms.position.y=this.event[l][1]*2-tz.ms.position.y;
 					tz.t.y=2*this.event[l][1]-tz.t.y;
@@ -979,15 +1045,35 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm){
 					tz.t.y=2*tz.ms.position.y-tz.t.y;
 					tz.bp.y=2*tz.ms.position.y-tz.bp.y;
 				}
-				tz.gy=1;
+				tz.gy=tz.btime;;
 			}
-		}else if(ge[m]=="jumpnext"){
+			break;
+		case "mirror":
+			if((!tz.gm)||(tz.btime-tz.gm>8)){
+				WEHOUCORE.mirror(tz.t,tz.hited_n1,tz.hited_n2,tz.t);
+				WEHOUCORE.mirror(tz.bp,tz.hited_n1,tz.hited_n2,tz.bp);
+				if(ge[m+1]){
+					var move=WEHOUCORE.mirror(tz.ms.position,tz.hited_n1,tz.hited_n2);
+					tz.t.sub(tz.t,move);
+				}else{
+					WEHOUCORE.mirror(tz.ms.position,tz.hited_n1,tz.hited_n2,tz.ms.position);
+				}
+				tz.gm=tz.btime;;
+			}
+			break;
+		case "jumpnext":
 			WEHOUCORE.nowstory.storyCT('jumpnext');
-		}else if(ge[m]=="se"){
+			break;
+		case "se":
 			WEHOUCORE.nowstory.seplay(ge[m+1]-1);
-		}else if(ge[m]=="die"){
+			break;
+		case "die":
 			tz.btime=this.bt-1;
-		}else{
+			break;
+		case 'func':
+			ge[m+1](tz,this);
+			break;
+		default:
 			tz[ge[m]]=ge[m+1];
 			//alert(tz.btime)
 		}
@@ -1020,18 +1106,52 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 			}
 			//this is event弹幕事件
 			for(l=0;l<this.event.length;l++){
-				if(this.event[l][0]=='t'?tz.btime==this.event[l][1]:
-				this.event[l][0]=='-x'?tz.ms.position.x<=(this.event[l][1]>=30000?WEHOUCORE.bspos[0].x+(this.event[l][1]-40000):this.event[l][1]>=10000?WEHOUCORE.lmpos.x+(this.event[l][1]-20000):this.event[l][1])&&(!tz.gx)&&(tz.gx=1):
-				this.event[l][0]=='+x'?tz.ms.position.x>=(this.event[l][1]>=30000?WEHOUCORE.bspos[0].x+(this.event[l][1]-40000):this.event[l][1]>=10000?WEHOUCORE.lmpos.x+(this.event[l][1]-20000):this.event[l][1])&&(!tz.gx)&&(tz.gx=1):
-				this.event[l][0]=='+y'?tz.ms.position.y>=(this.event[l][1]>=30000?WEHOUCORE.bspos[0].x+(this.event[l][1]-40000):this.event[l][1]>=10000?WEHOUCORE.lmpos.y+(this.event[l][1]-20000):this.event[l][1])&&(!tz.gy)&&(tz.gy=1):
-				this.event[l][0]=='-y'?tz.ms.position.y<=(this.event[l][1]>=30000?WEHOUCORE.bspos[0].x+(this.event[l][1]-40000):this.event[l][1]>=10000?WEHOUCORE.lmpos.y+(this.event[l][1]-20000):this.event[l][1])&&(!tz.gy)&&(tz.gy=1):
-				this.event[l][0]=='nt'?tz.btime&&((tz.btime-this.event[l][1][1])%this.event[l][1][0])==0:
-				this.event[l][0]=='ds'&&(!tz.gds)?WEHOUCORE.p2p(tz.ms.position,this.event[l][1][0],this.event[l][1][1],1)==1&&(tz.gds=1):
-				this.event[l][0]=='-ds'&&(!tz.gds)?!(WEHOUCORE.p2p(tz.ms.position,this.event[l][1][0],this.event[l][1][1],1)==1)&&(tz.gds=1):
-				this.event[l][0]=='ft'?tz.parentball.btime==this.event[l][1]:
-				0){
-					var ge=this.event[l][2];
-					this.eventer(tz,ge);
+				var ev=this.event[l];
+				var flag=0;
+				switch (ev[0]){
+				case 't':
+					flag=tz.btime==this.event[l][1];
+					break;
+				case '-x':
+					flag=tz.ms.position.x<=(ev[1]>=30000?WEHOUCORE.bspos[0].x+(ev[1]-40000):ev[1]>=10000?WEHOUCORE.lmpos.x+(ev[1]-20000):ev[1])&&(!tz.gx)&&(tz.gx=1);
+					break;
+				case '+x':
+					flag=tz.ms.position.x>=(ev[1]>=30000?WEHOUCORE.bspos[0].x+(ev[1]-40000):ev[1]>=10000?WEHOUCORE.lmpos.x+(ev[1]-20000):ev[1])&&(!tz.gx)&&(tz.gx=1);
+					break;
+				case '+y':
+					flag=tz.ms.position.y>=(ev[1]>=30000?WEHOUCORE.bspos[0].x+(ev[1]-40000):ev[1]>=10000?WEHOUCORE.lmpos.y+(ev[1]-20000):ev[1])&&(!tz.gy)&&(tz.gy=1);
+					break;
+				case '-y':
+					flag=tz.ms.position.y<=(ev[1]>=30000?WEHOUCORE.bspos[0].x+(ev[1]-40000):ev[1]>=10000?WEHOUCORE.lmpos.y+(ev[1]-20000):ev[1])&&(!tz.gy)&&(tz.gy=1);
+					break;
+				case 'nt':
+					flag=tz.btime&&((tz.btime-ev[1][1])%ev[1][0])==0;
+					break;
+				case 'ds':
+					flag=(!tz.gds)&&WEHOUCORE.p2p(tz.ms.position,ev[1][0],ev[1][1],1)==1&&(tz.gds=1);
+					break;
+				case '-ds':
+					flag=(!tz.gds)&&!(WEHOUCORE.p2p(tz.ms.position,ev[1][0],ev[1][1],1)==1)&&(tz.gds=1);
+					break;
+				case 'hit':
+					flag=(this.type=='laser'?WEHOUCORE.laserTest(tz.ms,this.longl,this.parent.l[ev[1][0]].ballbox,ev[1][1]):WEHOUCORE.ballTest(tz,this.parent.l[ev[1][0]].ballbox,ev[1][1]));
+					break;
+				case 'hited':
+					flag=tz.hited==1&&(ev[1]?(tz.hited=0):(tz.hited=2))+1;
+					break;
+				case 'hitl':
+					flag=(WEHOUCORE,p2l(tz.ms,tz.hited_n1=ev[1][0],tz.hited_n2=ev[1][1],ev[1][2])&&(tz.hited=1));
+					break;
+				case 'ft':
+					flag=tz.parentball.btime==ev[1];
+					break;
+				case 'func':
+					flag=ev[1](tz,this);
+					break;
+				}
+				if(flag){
+					var ge=ev[2];
+					this.eventer(tz,ge,l);
 				}
 			}
 			//event end
@@ -1280,6 +1400,7 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 			//死亡事件
 			if(tz.btime==this.bt){
 				tz.dieflag=true;
+				tz.bb=null;
 				for(l=0;l<this.deve.length;l++){
 					if(this.deve[l][0]=='bb'){
 						tz.bb=[this.deve[l][1][0],this.deve[l][1][1]];

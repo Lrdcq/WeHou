@@ -97,6 +97,7 @@ WEHOUGAME.addBoss=function(img,w,h,cut,video){
 	b.face=1;
 	b.now_time=0;
 	b.now_mod=1; // 0('back') 1('normal') 2('turn') 3('unturn') 4('run') -1('gameing')
+	c.seed=Math.random()*Math.PI;
 	c.deal=function(t,x,y,nx,ny){
 		function setstate(mod){
 			switch(mod){
@@ -144,9 +145,10 @@ WEHOUGAME.addBoss=function(img,w,h,cut,video){
 		}
 	}
 	c.act=function(t){
-		var sl=Math.sin(WEHOUCORE.time/50)*0.4;
+		var sl=Math.sin(WEHOUCORE.time/50+c.seed)*0.4;
 		var mc=this.children[0];
-		mc.rotation.z+=0.1;
+		mc.rotation.z=0.1;
+		mc.rotation.x+=0.001;
 		mc.scale.x=2.35+sl;
 		mc.scale.y=2.35+sl;
 		if(t==1){
@@ -159,19 +161,25 @@ WEHOUGAME.addBoss=function(img,w,h,cut,video){
 		}
 	}
 	c.sp=function(t){
-		var sl=Math.sin(WEHOUCORE.time/50)*0.4;
+		var sl=Math.sin(WEHOUCORE.time/50+c.seed)*0.4;
+		var sl2=Math.sin(WEHOUCORE.time/80+c.seed)*0.4;
+		var sl3=Math.sin(WEHOUCORE.time/100+c.seed)*0.4;
 		var mc=this.children[0];
-		mc.rotation.z+=0.1;
-		mc.scale.x=2.35+sl;
-		mc.scale.y=2.35+sl;
-		this.children[1].rotation.z-=0.02;
-		this.children[2].rotation.z+=0.02;
+		var mc2=this.children[1];
+		var mc3=this.children[2];
+		mc.rotation.z+=0.06;
+		mc.rotation.x+=sl3/100;
+		mc.rotation.y+=sl2/70;
+		mc.scale.x=3+sl;
+		mc.scale.y=3+sl;
+		mc2.rotation.z-=0.03;
+		mc2.rotation.x-=sl3/80;
+		mc2.rotation.y+=sl2/90;
+		mc3.rotation.z+=0.02;
 		if(t<60){
 			var x=WEHOUCORE.slowmove[3](t,0,1,60);
-			var mc=this.children[1];
-			mc.scale.x=mc.scale.y=x;
-			var mc=this.children[2];
-			mc.scale.x=mc.scale.y=x;
+			mc2.scale.x=mc2.scale.y=x;
+			mc3.scale.x=mc3.scale.y=x;
 		}
 	}
 	c.end=function(t){
@@ -341,7 +349,7 @@ WEHOUGAME.intGame=function(dom){
 	WEHOUGAME.tempspbg[1]=THREE.ImageUtils.loadTexture(WEHOUCORE.regimg('img/sp_1_fl.png'));
 
 	//boss和自机范例
-	WEHOUGAME.myimglist.add(['img/sysimg_01.png'],1,0);
+	WEHOUGAME.myimglist.add(['img/sysimg_01.png'],1,0,0,1);
 	WEHOUGAME.myimglist.add(['img/img_player.png'],0,0);
 	WEHOUGAME.myimglist.add(['img/eff_line.png'],1,0,0,1);
 	WEHOUGAME.myimglist.l[2].map.wrapS=WEHOUGAME.myimglist.l[2].map.wrapT=THREE.RepeatWrapping;
