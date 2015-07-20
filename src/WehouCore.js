@@ -748,6 +748,9 @@ WEHOUCORE.Bb1=function(parent,z){
 		this.tmat4.setRotationFromEuler(this.meshr,THREE.Object3D.defaultEulerOrder);
 		this.tmat4.scale(this.meshs);
 	}
+	//size and aplha
+	this.vsize=z.sizespeed||0;
+	//
 	this.m_fun=z.ballfunction||new THREE.Vector2(0,0);
 	this.lock=z.locked||false;//lock;
 	if(this.lock){this.changep=new THREE.Vector2(0,0)}
@@ -860,11 +863,11 @@ WEHOUCORE.Bb1.prototype.bread = function(al) {
 			//生成弹幕对象
 			if(this.motion=='normal'){
 				tx.add(tx,this.p);
-				var tb=new WEHOUCORE.Ball(tm,tx,this.v[0]==30000?(this.parentball.v):(this.v[i]||this.v[0])+this.aall[1]+(this.rv?(WEHOUCORE.random()*this.rv-this.rv/2):0),(this.va[i]||this.va[0])+(this.rva?(WEHOUCORE.random()*this.rva-this.rva/2):0),this.a[i]||this.a[0]);
+				var tb=new WEHOUCORE.Ball(tm,tx,this.v[0]==30000?(this.parentball.v):(this.v[i]||this.v[0])+this.aall[1]+(this.rv?(WEHOUCORE.random()*this.rv-this.rv/2):0),(this.va[i]||this.va[0])+(this.rva?(WEHOUCORE.random()*this.rva-this.rva/2):0),this.a[i]||this.a[0],0,0,0,0,new THREE.Vector2(this.vsize,this.vsize));
 			}else if(this.motion=='gravity'){
 				var govv=this.v[0]==30000?(this.parentball.v):(this.v[i]||this.v[0])+this.aall[1]+(this.rv?(WEHOUCORE.random()*this.rv-this.rv/2):0);
 				var ds=Math.sqrt(tx.x*tx.x+tx.y*tx.y);
-				var tb=new WEHOUCORE.Ball(tm,tx,new THREE.Vector2(tx.x*govv/ds,tx.y*govv/ds),0,new THREE.Vector2(this.g.x,this.g.y));
+				var tb=new WEHOUCORE.Ball(tm,tx,new THREE.Vector2(tx.x*govv/ds,tx.y*govv/ds),0,new THREE.Vector2(this.g.x,this.g.y),0,0,0,0,new THREE.Vector2(this.vsize,this.vsize));
 			}else if(this.motion=='mesh'){
 				var gmat4=new THREE.Matrix4(),flags=false;
 				if(this.rsetmove||this.setmove){
@@ -887,7 +890,7 @@ WEHOUCORE.Bb1.prototype.bread = function(al) {
 				}
 				var v=this.vert[i].clone();
 				if(flags){v=gmat4.multiplyVector4(v)}
-				var tb=new WEHOUCORE.Ball(tm,new THREE.Vector2(0,0),this.tmat4,0,v);
+				var tb=new WEHOUCORE.Ball(tm,new THREE.Vector2(0,0),this.tmat4,0,v,0,0,0,0,new THREE.Vector2(this.vsize,this.vsize));
 				//alert(this.vert[i]+' '+this.vert[i].x+' '+this.vert[i].x)
 			}if(this.motion=='function'){
 				var tb=new WEHOUCORE.Ball(tm,tx,0,0,0);
@@ -966,6 +969,9 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm,l){
 		case "va":
 			tz.va=ge[m+1]+WEHOUCORE.random()*ge[m+2]-ge[m+2]/2;
 			break;
+		case "valpha":
+			tz.valpha=ge[m+1];
+			break;
 		case "t":
 			tz.t=ge[m+1].clone();
 			if(tz.t.x>=10000){
@@ -1023,7 +1029,7 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm,l){
 			if(ge[m+1].y!=29999){tz.ms.position.y=ge[m+1].y;}
 			break;
 		case "-x":
-			if((!tz.gx)||(tz.btime-tz.gx>8)){
+			if((!tz.gx)||(tz.btime-tz.gx>5)){
 				if(this.event[l][0]=='+x'||this.event[l][0]=='-x'){
 					tz.ms.position.x=this.event[l][1]*2-tz.ms.position.x;
 					tz.t.x=2*this.event[l][1]-tz.t.x;
@@ -1036,7 +1042,7 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm,l){
 			}
 			break;
 		case "-y":
-			if((!tz.gy)||(tz.btime-tz.gy>8)){
+			if((!tz.gy)||(tz.btime-tz.gy>5)){
 				if(this.event[l][0]=='+y'||this.event[l][0]=='-y'){
 					tz.ms.position.y=this.event[l][1]*2-tz.ms.position.y;
 					tz.t.y=2*this.event[l][1]-tz.t.y;
@@ -1049,7 +1055,7 @@ WEHOUCORE.Bb1.prototype.eventer=function(tz,parm,l){
 			}
 			break;
 		case "mirror":
-			if((!tz.gm)||(tz.btime-tz.gm>8)){
+			if((!tz.gm)||(tz.btime-tz.gm>5)){
 				WEHOUCORE.mirror(tz.t,tz.hited_n1,tz.hited_n2,tz.t);
 				WEHOUCORE.mirror(tz.bp,tz.hited_n1,tz.hited_n2,tz.bp);
 				if(ge[m+1]){
@@ -1276,6 +1282,22 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 				gx=tz.ms.position.x-c.x;
 				gy=tz.ms.position.y-c.y;
 			}
+			//size and alpha
+			if(tz.vsize){
+				if(this.motion!='mesh'){
+					tz.ms.scale.x+=tz.vsize.x;
+					tz.ms.scale.y+=tz.vsize.y;
+				}else{
+					var size=tz.a.z*tz.vsize.x*0.002;
+					tz.ms.scale.x=1+size;
+					tz.ms.scale.y=1+size;
+				}
+			}
+			if(tz.valpha){
+				tz.alpha+=tz.valpha;
+				if(tz.alpha>1)tz.alpha=1;
+				if(tz.alpha<0)tz.alpha=0;
+			}
 			//关键：传递给shader的多余信息
 			if((!(this.type=='line'))&&this.ms){
 				tz.ms.scale.z=tz.alpha;//透明度
@@ -1332,7 +1354,7 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 			if(this.type=='laser'&&tz.btime>=this.att&&tz.ms.geometry.d){
 				var n1=WEHOUCORE.a2a(new THREE.Vector2(0,-this.longl*tz.ms.scale.y+tz.ms.geometry.d+20),tz.ms.rotation.z)
 				var n2=WEHOUCORE.a2a(new THREE.Vector2(0,-tz.ms.geometry.d-20),tz.ms.rotation.z)
-				if(WEHOUCORE.p2l(WEHOUCORE.lmpos,new THREE.Vector2(tz.ms.position.x+n1.x,tz.ms.position.y+n1.y),new THREE.Vector2(tz.ms.position.x+n2.x,tz.ms.position.y+n2.y),tz.ms.geometry.d)){dflag=1}
+				if(WEHOUCORE.p2l(WEHOUCORE.lmpos,new THREE.Vector2(tz.ms.position.x+n1.x,tz.ms.position.y+n1.y),new THREE.Vector2(tz.ms.position.x+n2.x,tz.ms.position.y+n2.y),tz.ms.geometry.d*tz.ms.scale.x)){dflag=1}
 			}
 			//self 自机弹幕判定
 			if(this.type=='self'){
@@ -1342,8 +1364,8 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 					if(this.islaser){
 						var n1=WEHOUCORE.a2a(new THREE.Vector2(0,-this.longl*tz.ms.scale.y+tz.ms.geometry.d+20),tz.ms.rotation.z)
 						var n2=WEHOUCORE.a2a(new THREE.Vector2(0,-tz.ms.geometry.d-20),tz.ms.rotation.z)
-						if(WEHOUCORE.p2l(xl[w].position,new THREE.Vector2(tz.ms.position.x+n1.x,tz.ms.position.y+n1.y),new THREE.Vector2(tz.ms.position.x+n2.x,tz.ms.position.y+n2.y),xl[w].hit_dis)){cflag=true}
-					}else if(WEHOUCORE.p2p(tz.ms.position,xl[w].position,xl[w].hit_dis,1)){cflag=true}
+						if(WEHOUCORE.p2l(xl[w].position,new THREE.Vector2(tz.ms.position.x+n1.x,tz.ms.position.y+n1.y),new THREE.Vector2(tz.ms.position.x+n2.x,tz.ms.position.y+n2.y),xl[w].hit_dis*tz.ms.scale.x)){cflag=true}
+					}else if(WEHOUCORE.p2p(tz.ms.position,xl[w].position,xl[w].hit_dis*tz.ms.scale.x,1)){cflag=true}
 					if(cflag){
 						tz.btime=this.bt-1;
 						xl[w].hit-=this.dmg;
@@ -1385,7 +1407,7 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 				}
 			}
 			//普通弹幕/敌机判定和处理
-			if((this.cstable?(tz.btime>10+this.aptime&&tz.alpha>0.95):1)&&(((this.type=='ball'||this.type=='enemy')&&this.ms&&tz.ms.geometry.d&&((tz.gz=WEHOUCORE.p2p(tz.ms.position,WEHOUCORE.lmpos,tz.ms.geometry.d,tz.gz))==1)))||dflag==1){
+			if((this.cstable?(tz.btime>10+this.aptime&&tz.alpha>0.95):1)&&(((this.type=='ball'||this.type=='enemy')&&this.ms&&tz.ms.geometry.d&&((tz.gz=WEHOUCORE.p2p(tz.ms.position,WEHOUCORE.lmpos,tz.ms.geometry.d*tz.ms.scale.x,tz.gz))==1)))||dflag==1){
 				if(WEHOUCORE.cheat==0){
 					WEHOUCORE.deal.hit();
 					if((!this.protect)&&(this.type=='ball'||this.type=='enemy')){tz.btime=this.bt-1;}
