@@ -725,7 +725,13 @@ WEHOUCORE.Bb1=function(parent,z){
 		
 		this.vert=z.vert||[];
 		this.num=this.vert.length;
-		for(k=0;k<this.num;k++){this.vert[k]=new THREE.Vector4(this.vert[k].x,this.vert[k].y,this.vert[k].z,1)}
+		this.docopy=z.vertcopy===undefined?true:z.vertcopy;
+		if(!this.vert[0].w){
+			this.docopy=true;
+		}
+		if(this.docopy){
+			for(k=0;k<this.num;k++){this.vert[k]=new THREE.Vector4(this.vert[k].x,this.vert[k].y,this.vert[k].z,1)}
+		}
 		
 		this.bk=z.goback||0;
 		this.fout=z.faceout||false;
@@ -1481,10 +1487,12 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 	}
 	//弹幕生成器事件
 	for(l=0;l<this.myeve.length;l++){
-		if(this.ot==this.myeve[l][0]){
+		if(this.ot==this.myeve[l][0]||this.myeve[l][0]==-1){
 			if(this.myeve[l][1]=='t'){
 				this.t.x=this.myeve[l][2].x;this.t.y=this.myeve[l][2].y;
 				if(this.t.x==29999&&this.t.y==29999){this.t.x=WEHOUCORE.lmpos.x;this.t.y=WEHOUCORE.lmpos.y;}
+			}else if(this.myeve[l][1]=='func'){
+				this.myeve[l][2](this);
 			}else{
 				this[this.myeve[l][1]]=this.myeve[l][2];
 			}
