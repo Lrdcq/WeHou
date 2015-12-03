@@ -8,7 +8,6 @@ I use a changed Three.js to hold the game.Also the stats.js.
 Now , I'm working TODO:
 
 - 3D deep bullet engine
-- uesful and complex special effects engine
 - rewrite the game engine js (not core)
 
 What we have done:
@@ -16,8 +15,13 @@ What we have done:
 - **Most important functions and models of a stg game like TouHou**
 - some small modeled specail bullet creater engine
 - easy script to describe bullet creater and story
+- uesful special effects engine, item engine and so on
 
 ### Demo Games
+
+DEMO 8 : [东方绀珠传AEX](http://demo8.lrd.moe) [2015-12-4] 
+
+![DEMO8](./img/demo8.jpg)
 
 DEMO 7 : [狸舞賀春短劇](http://demo7.lrd.moe) [2015-2-27] 
 
