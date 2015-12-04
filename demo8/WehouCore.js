@@ -1209,10 +1209,10 @@ WEHOUCORE.Bb1.prototype.going=function(zp){
 			//出现特效
 			var fg=0;
 			if(tz.btime==0){fg=this.ds;}
-			if(this.type!='laser'&&this.type!='self'&&tz.btime<10+this.aptime&&this.ms){
+			if(this.type!='laser'&&this.type!='self'&&tz.btime<=10+this.aptime&&this.ms){
 				//var bte=tz.btime;
-				var bte=this.aptime?(tz.btime<5?tz.btime:(tz.btime>=5+this.aptime?tz.btime-this.aptime:4)):tz.btime;
-				var sl=3-(tz.btime+1)*0.2;
+				var bte=this.aptime?(tz.btime<5?tz.btime:(tz.btime>=5+this.aptime?tz.btime-this.aptime:5)):tz.btime;
+				var sl=3-(tz.btime)*0.2;
 				sl=sl<1?1:sl;
 				tz.alpha=bte/10;
 				tz.ms.scale.x=sl;
