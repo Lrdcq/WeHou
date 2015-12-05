@@ -106,7 +106,7 @@ WEHOUGAME.userInt=function(){
 	var lasttime=0;
 	var story=WEHOUGAME.mainstory;
 	//
-	story.setName('demo8_v1_20151202');
+	story.setName('demo8_v1_20151205');
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),320,80,[1/16,11/16,8/32,3/32]);//id==0 关卡标题
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),160,16,[6/16,11/16,3/32,2/32]);//id==1 关卡标题2
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),160,160,[11/16,16/16,5/16,0/16]);//id==3 关卡图案
@@ -819,7 +819,7 @@ WEHOUGAME.userInt=function(){
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.y+280));
 					if(dis<60){
 						tz.alpha+=(1-dis/60)*0.7;
-						tz.ms.position.y-=(1-dis/60)*1.2;
+						tz.ms.position.y-=(1-dis/60)*1;
 					}
 				}
 			}},
@@ -830,7 +830,7 @@ WEHOUGAME.userInt=function(){
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.y+280));
 					if(dis<60){
 						tz.alpha+=(1-dis/60)*0.7;
-						tz.ms.position.y-=(1-dis/60)*1.2;
+						tz.ms.position.y-=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_2.length;i++){
@@ -838,7 +838,7 @@ WEHOUGAME.userInt=function(){
 					var dis=Math.abs((bb.ot-d)*2-(tz.ms.position.x+240));
 					if(dis<60){
 						tz.alpha+=(1-dis/60)*0.7;
-						tz.ms.position.x+=(1-dis/60)*1.2;
+						tz.ms.position.x+=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_3.length;i++){
@@ -846,7 +846,7 @@ WEHOUGAME.userInt=function(){
 					var dis=Math.abs((bb.ot-d)*2-(tz.ms.position.y+280));
 					if(dis<60){
 						tz.alpha+=(1-dis/60)*0.7;
-						tz.ms.position.y+=(1-dis/60)*1.2;
+						tz.ms.position.y+=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_4.length;i++){
@@ -854,11 +854,11 @@ WEHOUGAME.userInt=function(){
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.x+240));
 					if(dis<60){
 						tz.alpha+=(1-dis/60)*0.7;
-						tz.ms.position.x-=(1-dis/60)*1.2;
+						tz.ms.position.x-=(1-dis/60)*1.1;
 					}
 				}
 			}},
-			{mesh:WEHOUGAME.getBullet(40),speed:[0],number:3,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,speedrandom:0.6,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
+			{mesh:WEHOUGAME.getBullet(40),speed:[0],number:3,numberrandom:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,speedrandom:0.6,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
 				if(tz.alpha>0.3)tz.alpha=0.3;
 				for(var j=0;j<wave_3_p.length;j++){
 					var v=wave_3_p[j];
@@ -869,8 +869,8 @@ WEHOUGAME.userInt=function(){
 						if(dis<60){
 							var r=(1-dis/50);
 							tz.alpha+=r*0.7;
-							tz.ms.position.x-=(v.x-tz.ms.position.x)/len*r*1.2;
-							tz.ms.position.y-=(v.y-tz.ms.position.y)/len*r*1.2;
+							tz.ms.position.x-=(v.x-tz.ms.position.x)/len*r*1;
+							tz.ms.position.y-=(v.y-tz.ms.position.y)/len*r*1;
 						}
 					}
 				}
@@ -986,7 +986,7 @@ WEHOUGAME.userInt=function(){
 	story.adds({time:175*4,group:[53],act:[9,[[['1',1,0,1200,320,500],['2',0,0,800,320,400],[1]],[0,1,'欸～看，打跑了吧。'],[175,0,'诶呀，是我的火把力量减弱了么？'],[350,0,'随便啦，来自地狱的<ruby>妖精<rt>我</rt>是不会停下的。</ruby>'],[175*3,1,"=w=，随你好了......"]]],bt:true});
 	
 	story.adds({time:10,act:[9999,0]});
-	//story.p=15;
+	//story.p=41;
 	
 	//WEHOUGAME.mymusicon=[WEHOUGAME.getMusic(1),0,60*3+22.2,7.562,175*4-30];
 	//WEHOUGAME.getMusic(1).play();
