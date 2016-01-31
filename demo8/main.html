@@ -106,7 +106,7 @@ WEHOUGAME.userInt=function(){
 	var lasttime=0;
 	var story=WEHOUGAME.mainstory;
 	//
-	story.setName('demo8_v1_20151205');
+	story.setName('demo8_v1_20160130');
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),320,80,[1/16,11/16,8/32,3/32]);//id==0 关卡标题
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),160,16,[6/16,11/16,3/32,2/32]);//id==1 关卡标题2
 	WEHOUGAME.addPla(WEHOUGAME.getBulletImg(5),160,160,[11/16,16/16,5/16,0/16]);//id==3 关卡图案
@@ -155,6 +155,7 @@ WEHOUGAME.userInt=function(){
 	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),40,40,8,'ball',1,[2/16,4/16,22/32,24/32]);//id=41 红色大星弹(光)
 	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),40,40,8,'ball',1,[8/16,6/16,22/32,24/32]);//id=42 蓝色大星弹(光)
 	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(0),40,40,8,'ball',1,[14/16,12/16,22/32,24/32]);//id=43 黄色大星弹(光)
+	WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(3),20,20,3,'ball',1,[13/16,14/16,15/32,16/32]);//id=44 黄色米弹
 	
 	story.add(//道中part1
 		{},
@@ -366,8 +367,8 @@ WEHOUGAME.userInt=function(){
 			{mesh:WEHOUGAME.getBullet(24),target:vec2(20000,-1000),speed:[8],acceleration:[-0.2],bulletevents:[['t',15,['v',1,0,'a',0,0,'bb',[8,0],0]]],anglechange:[-13,-900],period:2,angleoffset:45,lifetime:290,protect:true,palstance:[1]},
 			{mesh:WEHOUGAME.getBullet(9),period:1000,position:vec2(-120,300),positionlock:false,speed:[3],rotating:false,type:'enemy',hitblood:100,lifetime:540,target:vec2(20000,-1000),item:[[1,30,100],[0,50,100]],bulletevents:[['t',30,['bb',[6,0],0,'v',0.6,0,'t',WEHOUCORE.lmpos,0]],['t',61,['bb',[9,0],0]],['t',320,['bb',0,0]],['t',420,['a',0.06,0,'va',0.5,0]]]},
 			{mesh:WEHOUGAME.getBullet(9),period:1000,position:vec2(120,300),positionlock:false,speed:[3],rotating:false,type:'enemy',hitblood:90,lifetime:540,target:vec2(20000,-1000),item:[[1,30,100],[0,50,100]],bulletevents:[['t',30,['bb',[7,0],0,'v',0.6,0,'t',WEHOUCORE.lmpos,0]],['t',61,['bb',[9,0],0]],['t',420,['bb',0,0,'a',0.06,0,'va',-0.5,0]]]},
-			{mesh:WEHOUGAME.getBullet(24),target:vec2(20000,-1000),speed:[8],acceleration:[-0.2],bulletevents:[['t',15,['v',1,0,'a',0,0,'bb',[8,0],0]]],anglechange:[9,900],period:1,angleoffset:-45,lifetime:290,protect:true,palstance:[-1]},
-			{mesh:WEHOUGAME.getBullet(24),target:vec2(20000,-1000),speed:[8],acceleration:[-0.2],bulletevents:[['t',15,['v',1,0,'a',0,0,'bb',[8,0],0]]],anglechange:[-9,-900],period:1,angleoffset:45,lifetime:290,protect:true,palstance:[1]},
+			{mesh:WEHOUGAME.getBullet(24),target:vec2(20000,-1000),speed:[8],acceleration:[-0.2],bulletevents:[['t',15,['v',1,0,'a',0,0,'bb',[8,0],0]]],anglechange:[10,900],period:1,angleoffset:-45,lifetime:290,protect:true,palstance:[-1]},
+			{mesh:WEHOUGAME.getBullet(24),target:vec2(20000,-1000),speed:[8],acceleration:[-0.2],bulletevents:[['t',15,['v',1,0,'a',0,0,'bb',[8,0],0]]],anglechange:[-10,-900],period:1,angleoffset:45,lifetime:290,protect:true,palstance:[1]},
 			{period:1000,type:'laser',number:1,speed:[800],mesh:WEHOUGAME.getBullet(25),appearline:60,lifetime:260,bulletevents:[['t',1,['v',0.0001,0]]],target:vec2(30000,30000),locked:true},
 			{mesh:WEHOUGAME.getBullet(7),period:1,number:1,angleoffset:-90,anglechange:[8,180],anglerandom:2,speed:[0],distance:40,rotating:2,outfield:true,acceleration:[0.05],lifetime:240}
 		],
@@ -481,7 +482,7 @@ WEHOUGAME.userInt=function(){
 		[
 			{mesh:WEHOUGAME.getBullet(17),number:20,angle:[4],outfield:true,speed:[3],period:93,bulletevents:[['+y',280,['-y',0,0,'bb',[1,0],0,'die',0,0]]],target:vec2(20000,2000)},
 			{period:1000,type:'laser',number:1,speed:[700],mesh:WEHOUGAME.getBullet(28),appearline:60,lifetime:100,bulletevents:[['t',1,['v',0.0001,0]]],target:vec2(30000,30000),locked:true},
-			{mesh:WEHOUGAME.getBullet(17),number:26,angle:[-120],numberchange:[2,1000],outfield:true,speed:[3],period:93,timeoffset:50,bulletevents:[['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:520,target:vec2(20000,2000)}
+			{mesh:WEHOUGAME.getBullet(44),number:26,angle:[-120],numberchange:[2,1000],outfield:true,speed:[3],period:93,timeoffset:50,bulletevents:[['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:520,target:vec2(20000,2000)}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
 		97,vec2(0,120),vec2(150,60),
@@ -642,8 +643,8 @@ WEHOUGAME.userInt=function(){
 		[
 			{mesh:WEHOUGAME.getBullet(34),speed:[-320],bulletevents:[['t',1,['v',2.2,0,'bb',[2,0],0]]],lifetime:350,period:97*4,angleoffset:-90,positionlock:false,position:vec2(0,50),anglechange:[-60,-120000]},
 			{mesh:WEHOUGAME.getBullet(34),speed:[-320],bulletevents:[['t',1,['v',2.4,0,'bb',[3,0],0]]],lifetime:300,period:97*4,angleoffset:90,positionlock:false,position:vec2(0,50),anglechange:[-60,-120000]},
-			{mesh:WEHOUGAME.getBullet(37),speed:[0.01],outfield:true,positionrandom:vec2(150,180),bulletevents:[['t',1,['eff',3,0]],['t',140,['a',0.02,0]]],anglerandom:360,period:1,rotating:2,lifetime:400},
-			{mesh:WEHOUGAME.getBullet(38),speed:[0.01],outfield:true,positionrandom:vec2(180,150),bulletevents:[['t',1,['eff',2,0]],['t',140,['a',0.02,0]]],anglerandom:360,period:1,rotating:2,lifetime:400}
+			{mesh:WEHOUGAME.getBullet(37),speed:[0.01],outfield:true,positionrandom:vec2(150,180),bulletevents:[['t',1,['eff',3,0]],['t',100,['a',0.02,0]],['t',250,['a',0,0]]],anglerandom:480,period:1,rotating:2,lifetime:400},
+			{mesh:WEHOUGAME.getBullet(38),speed:[0.01],outfield:true,positionrandom:vec2(180,150),bulletevents:[['t',1,['eff',2,0]],['t',100,['a',0.02,0]],['t',250,['a',0,0]]],anglerandom:480,period:1,rotating:2,lifetime:400}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
 		96*2,vec2(0,100),vec2(100,100),
@@ -668,10 +669,10 @@ WEHOUGAME.userInt=function(){
 		[
 			{mesh:WEHOUGAME.getBullet(17),number:54,angle:[6],outfield:true,speed:[3],period:97*2,bulletevents:[['+y',280,['-y',0,0,'bb',[1,0],0,'die',0,0,'gx',1,0]],['+x',240,['-x',0,0,'bb',[1,0],0,'die',0,0]],['-x',-240,['-x',0,0,'bb',[1,0],0,'die',0,0]]],target:vec2(20000,2000)},
 			{period:1000,type:'laser',number:1,speed:[700],mesh:WEHOUGAME.getBullet(28),appearline:60,lifetime:100,bulletevents:[['t',1,['v',0.0001,0]]],target:vec2(30000,30000),locked:true},
-			{mesh:WEHOUGAME.getBullet(17),number:12,angle:[-120],numberchange:[0.3,1000],outfield:true,speed:[4.5],period:30,lifetime:150}
+			{mesh:WEHOUGAME.getBullet(44),number:12,angle:[-120],numberchange:[0.2,1000],outfield:true,speed:[4.5],period:30,lifetime:150}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
-		99,vec2(0,120),vec2(150,60),
+		99,vec2(0,120),vec2(100,60),
 		0],
 		[[0,2]]
 	);
@@ -690,14 +691,14 @@ WEHOUGAME.userInt=function(){
 			{speed:[5],otating:2,period:100000,bulletevents:[['-x',-240,['-x',0,0,'bb',[8,0],0,'die',0,0,'eff',5,0]]],target:vec2(30000,30000)},
 			{period:1000,type:'line',linelong:50,linematerial:WEHOUGAME.getBulletImg(2),materialcut:[2/16,3/16],number:1,speed:[1],appearline:50,lifetime:200,target:vec2(30000,30000),locked:true,palstance:[8],bulletevents:[['nt',[30,0],['va',8,0]],['nt',[30,15],['va',-8,0]]],angleoffset:-60,acceleration:[0.05]},
 			{period:97*8,timeoffset:97*5+48,lifetime:97+48,bulletevents:[['t',1,['bb',[10,0],0]]],speed:[0.01],positionlock:false,position:vec2(0,290)},
-			{mesh:WEHOUGAME.getBullet(31),type:'laser',speed:[1],acceleration:[0.4],period:8,positionrandom:vec2(480,0),target:vec2(20000,-1000),bulletevents:[['t',30,['bb',[11,0],0]],['-y',-280,['die',0,0,'eff',4,0]]],appearline:200},
+			{mesh:WEHOUGAME.getBullet(31),type:'laser',speed:[1],acceleration:[0.4],period:10,positionrandom:vec2(480,0),target:vec2(20000,-1000),bulletevents:[['t',30,['bb',[11,0],0]],['-y',-280,['die',0,0,'eff',4,0]]],appearline:200},
 			{speed:[10],otating:2,period:100000,bulletevents:[['-y',-280,['-y',0,0,'bb',[2,0],0,'die',0,0,'eff',4,0]]],target:vec2(30000,30000)},
 			{period:97*8,timeoffset:97*5+48,lifetime:97+48,bulletevents:[['t',1,['bb',[13,0],0]]],speed:[0.01],positionlock:false,position:vec2(0,290)},
-			{mesh:WEHOUGAME.getBullet(28),type:'laser',speed:[1],acceleration:[0.4],period:8,positionrandom:vec2(480,0),target:vec2(20000,-1000),bulletevents:[['t',30,['bb',[14,0],0]],['-y',-280,['die',0,0,'eff',5,0]]],appearline:200},
+			{mesh:WEHOUGAME.getBullet(28),type:'laser',speed:[1],acceleration:[0.4],period:10,positionrandom:vec2(480,0),target:vec2(20000,-1000),bulletevents:[['t',30,['bb',[14,0],0]],['-y',-280,['die',0,0,'eff',5,0]]],appearline:200},
 			{speed:[10],otating:2,period:100000,bulletevents:[['-y',-280,['-y',0,0,'bb',[5,0],0,'die',0,0,'eff',5,0]]],target:vec2(30000,30000)}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
-		50,vec2(0,90),vec2(30,0),
+		200,vec2(0,90),vec2(100,50),
 		0],
 		[[0,3,6,9,12]]
 	);
@@ -719,7 +720,7 @@ WEHOUGAME.userInt=function(){
 		[
 			{period:96,type:'laser',number:1,speed:[-1],positionlock:false,position:vec2(0,280),mesh:WEHOUGAME.getBullet(25),appearline:11,lifetime:145,bulletevents:[['hit',[2,20],[]],['t',1,['v',-0.01,0,'va',0.6,0]]],target:vec2(-1000,20050)},
 			{period:96,timeoffset:48,type:'laser',number:1,speed:[-1],positionlock:false,position:vec2(0,280),mesh:WEHOUGAME.getBullet(25),appearline:11,lifetime:145,bulletevents:[['hit',[2,20],[]],['t',1,['v',-0.01,0,'va',-0.6,0]]],target:vec2(1000,20050)},
-			{mesh:WEHOUGAME.getBullet(22),number:35,angle:[-180],speed:[2.8],speedchange:[0.06,50],period:48,bulletevents:[['hited',0,['mirror',1,0]]],timeoffset:0,lifetme:160,outfield:true}
+			{mesh:WEHOUGAME.getBullet(22),number:31,angle:[-190],speed:[2.8],speedchange:[0.06,50],period:48,bulletevents:[['hited',0,['mirror',1,0]]],timeoffset:0,lifetme:160,outfield:true}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
 		100000,vec2(0,120),vec2(0,0),
@@ -789,7 +790,7 @@ WEHOUGAME.userInt=function(){
 			{mesh:WEHOUGAME.getBullet(4),period:96*4*3,timeoffset:96*4*2+50,number:12,numberchange:[2,400],positionlock:false,position:WEHOUCORE.lmpos,distance:50,target:vec2(20000,1000),palstance:[2000.5],speed:[2.9],rotating:false,type:'enemy',hitblood:100,lifetime:230,item:[[2,5,50]],bulletevents:[['t',1,['a',-0.029,0]],['t',100,['v',0.01,0,'va',0,0,'a',0,0,'eff',10,0]],['t',200,['eff',8,0]]]}
 		],
 		[0,vec2(-9998,-9998),vec2(0,0),
-		89,vec2(0,200),vec2(100,0),
+		89,vec2(0,200),vec2(40,0),
 		0],
 		[[0,1,2,3]]
 	);
@@ -808,57 +809,62 @@ WEHOUGAME.userInt=function(){
 	var wave_1=[100,400,600,750,850,950,1050,1150,1250,1350]
 	var wave_2_1=[100,700,1300],wave_2_2=[250,850,1450],wave_2_3=[400,1000],wave_2_4=[550,1150];
 	var wave_3_p=[vec2(-240,280),vec2(240,280),vec2(240,-280),vec2(-240,-280)];
-	var wave_3=[[100,700,1500,1650],[400,1000,1500,1650],[200,800,1400,1550],[500,1100,1400,1550]]
+	var wave_3=[[100,700,1500,1650],[400,1000,1500,1650],[200,800,1400,1550],[500,1100,1400,1550]];
+	var pos_fun=function(bb,i,pos){
+		if(WEHOUCORE.p2p(pos,WEHOUCORE.lmpos,30,1)){
+			pos.y+=50;
+		}
+	}
 	story.add(//9符
 		{},
 		[
-			{mesh:WEHOUGAME.getBullet(37),speed:[0],number:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,speedrandom:0.8,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
+			{mesh:WEHOUGAME.getBullet(37),speed:[0],number:2,numberrandom:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),positionfunction:pos_fun,lifetime:300,speedrandom:0.8,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
 				if(tz.alpha>0.3)tz.alpha=0.3;
 				for(var i=0;i<wave_1.length;i++){
 					var d=wave_1[i];
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.y+280));
-					if(dis<60){
-						tz.alpha+=(1-dis/60)*0.7;
+					if(dis<90){
+						tz.alpha+=(1-dis/90)*0.7;
 						tz.ms.position.y-=(1-dis/60)*1;
 					}
 				}
 			}},
-			{mesh:WEHOUGAME.getBullet(39),speed:[0],number:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,speedrandom:0.8,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
+			{mesh:WEHOUGAME.getBullet(39),speed:[0],number:2,numberrandom:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),positionfunction:pos_fun,lifetime:300,speedrandom:0.8,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
 				if(tz.alpha>0.3)tz.alpha=0.3;
 				for(var i=0;i<wave_2_1.length;i++){
 					var d=wave_2_1[i];
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.y+280));
-					if(dis<60){
-						tz.alpha+=(1-dis/60)*0.7;
+					if(dis<90){
+						tz.alpha+=(1-dis/90)*0.7;
 						tz.ms.position.y-=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_2.length;i++){
 					var d=wave_2_2[i];
 					var dis=Math.abs((bb.ot-d)*2-(tz.ms.position.x+240));
-					if(dis<60){
-						tz.alpha+=(1-dis/60)*0.7;
+					if(dis<90){
+						tz.alpha+=(1-dis/90)*0.7;
 						tz.ms.position.x+=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_3.length;i++){
 					var d=wave_2_3[i];
 					var dis=Math.abs((bb.ot-d)*2-(tz.ms.position.y+280));
-					if(dis<60){
-						tz.alpha+=(1-dis/60)*0.7;
+					if(dis<90){
+						tz.alpha+=(1-dis/90)*0.7;
 						tz.ms.position.y+=(1-dis/60)*1.1;
 					}
 				}
 				for(var i=0;i<wave_2_4.length;i++){
 					var d=wave_2_4[i];
 					var dis=Math.abs((bb.ot-d)*2-(-tz.ms.position.x+240));
-					if(dis<60){
-						tz.alpha+=(1-dis/60)*0.7;
+					if(dis<90){
+						tz.alpha+=(1-dis/90)*0.7;
 						tz.ms.position.x-=(1-dis/60)*1.1;
 					}
 				}
 			}},
-			{mesh:WEHOUGAME.getBullet(40),speed:[0],number:3,numberrandom:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,speedrandom:0.6,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
+			{mesh:WEHOUGAME.getBullet(40),speed:[0],number:2,anglerandom:360,rotating:2,targetrandom:1000,target:vec2(20000,2000),lifetime:300,positionfunction:pos_fun,speedrandom:0.6,positionlock:false,position:vec2(0,0),positionrandom:vec2(480,560),period:1,alphafun:function(tz,bb){
 				if(tz.alpha>0.3)tz.alpha=0.3;
 				for(var j=0;j<wave_3_p.length;j++){
 					var v=wave_3_p[j];
@@ -867,7 +873,7 @@ WEHOUGAME.userInt=function(){
 						var len=Math.sqrt((v.x-tz.ms.position.x)*(v.x-tz.ms.position.x)+(v.y-tz.ms.position.y)*(v.y-tz.ms.position.y));
 						var dis=Math.abs((bb.ot-d)*2-len);
 						if(dis<60){
-							var r=(1-dis/50);
+							var r=(1-dis/60);
 							tz.alpha+=r*0.7;
 							tz.ms.position.x-=(v.x-tz.ms.position.x)/len*r*1;
 							tz.ms.position.y-=(v.y-tz.ms.position.y)/len*r*1;
@@ -906,41 +912,21 @@ WEHOUGAME.userInt=function(){
 	);
 	story.adds({time:260,group:[47,48],act:[0,""]});
 	
-	var a_fun=function(tz,bb){
-		var tar=0;
-		if(WEHOUCORE.nowstory.self.isSlow)tar=1;
-		else tar=0.5;
-		if(tz.alpha<tar)tz.alpha+=0.05;
-		else if(tz.alpha>tar)tz.alpha-=0.05;
-	},a_fun_2=function(tz,bb){
-		if(WEHOUCORE.nowstory.self.isSlow)tz.alpha=1;
-		else tz.alpha=0.3;
-	};
-	var b_fun=function(tz,bb){
-		var tar=0;
-		if(!WEHOUCORE.nowstory.self.isSlow)tar=1;
-		else tar=0.5;
-		if(tz.alpha<tar)tz.alpha+=0.05;
-		else if(tz.alpha>tar)tz.alpha-=0.05;
-	},b_fun_2=function(tz,bb){
-		if(!WEHOUCORE.nowstory.self.isSlow)tz.alpha=1;
-		else tz.alpha=0.3;
-	};
 	story.add(//10符
 		{mesh:WEHOUGAME.getBoss(1),hit:4200,delmesh:false,player:'sp',kick_dis:30,reload:[['h',4200*0.55,[[3,4,5,8,9]]],['h',4200*0.25,[[3,4,5,10,11]]],['t',7200-60*30,[[3,4,5,10,11]]]]},
 		[
-			{mesh:WEHOUGAME.getBullet(40),positionrandom:vec2(10,10),speed:[0.1],rotating:2,anglerandom:360,period:10,lifetime:30,alphafun:a_fun_2},
-			{mesh:WEHOUGAME.getBullet(37),positionrandom:vec2(10,10),speed:[0.1],rotating:2,anglerandom:360,period:10,lifetime:30,alphafun:b_fun_2},
+			{mesh:WEHOUGAME.getBullet(40),positionrandom:vec2(10,10),speed:[0.1],rotating:2,anglerandom:360,period:10,lifetime:30},
+			{mesh:WEHOUGAME.getBullet(37),positionrandom:vec2(10,10),speed:[0.1],rotating:2,anglerandom:360,period:10,lifetime:30},
 			{mesh:WEHOUGAME.getBullet(39),positionrandom:vec2(10,10),speed:[0.1],rotating:2,anglerandom:360,period:10,lifetime:30},
-			{mesh:WEHOUGAME.getBullet(41),number:48,rotating:2,period:92*4,timeoffset:10,speed:[6],acceleration:[-4/60],bulletevents:[['t',60,['a',0,0,'bb',[0,0],0]],['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:600,outfield:true,alphafun:a_fun,numberchange:[0.25,100]},
-			{mesh:WEHOUGAME.getBullet(42),number:49,rotating:2,period:92*4,timeoffset:50,speed:[4],acceleration:[-2/60],bulletevents:[['t',60,['a',0,0,'bb',[1,0],0]],['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:600,outfield:true,alphafun:b_fun,numberchange:[0.25,100]},
-			{mesh:WEHOUGAME.getBullet(43),number:32,rotating:2,period:92*4,timeoffset:90,speed:[2],bulletevents:[['t',1,['bb',[2,0],0]]],lifetime:200,outfield:true,numberchange:[0.4,100]},
-			{period:92*2,timeoffset:92,type:'laser',number:15,angle:[6],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:2,appearline:30,lifetime:90,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]],alphafun:b_fun},
-			{period:92*2,timeoffset:92+92,type:'laser',number:15,angle:[6],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:2,appearline:30,lifetime:90,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]],alphafun:a_fun},
-			{period:92,timeoffset:92/2,type:'laser',number:17,angle:[5],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:2,appearline:20,lifetime:40,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]],alphafun:b_fun},
-			{period:92,timeoffset:92/2+92/2,type:'laser',number:17,angle:[5],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:2,appearline:20,lifetime:40,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]],alphafun:a_fun},
-			{period:92/2,timeoffset:10,type:'laser',number:20,angle:[4],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:2,appearline:11,lifetime:25,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]],alphafun:b_fun},
-			{period:92/2,timeoffset:10+92/4,type:'laser',number:20,angle:[4],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:2,appearline:11,lifetime:25,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]],alphafun:a_fun},
+			{mesh:WEHOUGAME.getBullet(41),number:36,rotating:2,period:92*4,timeoffset:10,speed:[6],acceleration:[-4/60],bulletevents:[['t',60,['a',0,0,'bb',[0,0],0]],['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:600,outfield:true,numberchange:[0.4,100]},
+			{mesh:WEHOUGAME.getBullet(42),number:37,rotating:2,period:92*4,timeoffset:50,speed:[4],acceleration:[-2/60],bulletevents:[['t',60,['a',0,0,'bb',[1,0],0]],['+x',240,['-x',0,0]],['-x',-240,['-x',0,0]],['+y',280,['-y',0,0]]],lifetime:600,outfield:true,numberchange:[0.4,100]},
+			{mesh:WEHOUGAME.getBullet(43),number:36,rotating:2,period:92*4,timeoffset:90,speed:[2],bulletevents:[['t',1,['bb',[2,0],0]]],lifetime:200,outfield:true,numberchange:[0.4,100]},
+			{period:92*2,timeoffset:92,type:'laser',number:12,angle:[6],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:0.7,appearline:30,lifetime:90,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]]},
+			{period:92*2,timeoffset:92+92,type:'laser',number:12,angle:[6],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:0.7,appearline:30,lifetime:90,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]]},
+			{period:92,timeoffset:92/2,type:'laser',number:14,angle:[5],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:0.3,appearline:20,lifetime:40,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]]},
+			{period:92,timeoffset:92/2+92/2,type:'laser',number:14,angle:[5],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:0.3,appearline:20,lifetime:40,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]]},
+			{period:92/2,timeoffset:10,type:'laser',number:16,angle:[4],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(11),anglerandom:0.1,appearline:11,lifetime:25,bulletevents:[['t',1,['v',800,0,'eff',11,0]],['t',2,['v',0.0001,0]]]},
+			{period:92/2,timeoffset:10+92/4,type:'laser',number:16,angle:[4],position:vec2(0,500),distance:250,speed:[0],mesh:WEHOUGAME.getBullet(25),anglerandom:0.1,appearline:11,lifetime:25,bulletevents:[['t',1,['v',800,0,'eff',12,0]],['t',2,['v',0.0001,0]]]},
 		],
 		[0,vec2(0,50),vec2(0,0),
 		20000,vec2(0,50),vec2(0,0),
@@ -986,7 +972,7 @@ WEHOUGAME.userInt=function(){
 	story.adds({time:175*4,group:[53],act:[9,[[['1',1,0,1200,320,500],['2',0,0,800,320,400],[1]],[0,1,'欸～看，打跑了吧。'],[175,0,'诶呀，是我的火把力量减弱了么？'],[350,0,'随便啦，来自地狱的<ruby>妖精<rt>我</rt>是不会停下的。</ruby>'],[175*3,1,"=w=，随你好了......"]]],bt:true});
 	
 	story.adds({time:10,act:[9999,0]});
-	//story.p=41;
+	//story.p=30;
 	
 	//WEHOUGAME.mymusicon=[WEHOUGAME.getMusic(1),0,60*3+22.2,7.562,175*4-30];
 	//WEHOUGAME.getMusic(1).play();
@@ -1032,7 +1018,7 @@ WEHOUGAME.afterInt=function(){
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),400,400,0,'ball',1,[7/8,8/8,7/8,6/8])),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:40,valpha:-0.005,size:vec2(1,1),alpha:0.2},//黄色
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),400,400,0,'ball',1,[7/8,6/8,7/8,6/8])),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:40,valpha:-0.005,size:vec2(1,1),alpha:0.2},//红色
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),400,400,0,'ball',1,[7/8,6/8,7/8,8/8])),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:40,valpha:-0.005,size:vec2(1,1),alpha:0.2},//蓝色2
-		{mesh:new THREE.Mesh(new THREE.CircleGeometry(90,64),WEHOUGAME.getBulletImg(6)),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:96+48,size:vec2(1,1),vsize:vec2(0.005,0.005),alpha:0.00001},
+		{mesh:new THREE.Mesh(new THREE.CircleGeometry(90,64),WEHOUGAME.getBulletImg(6)),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:96+36,size:vec2(1,1),vsize:vec2(0.005,0.005),alpha:0.00001},
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),400,400,0,'ball',1,[7/8,8/8,7/8,8/8])),period:96,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:20,valpha:-0.0075,size:vec2(1,1),alpha:0.15},//紫色2
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),120,120,0,'ball',1,[5/8,6/8,7/8,6/8])),alpha:0.4,period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:100,vsize:vec2(-0.009,-0.009)},//
 		{mesh:WEHOUGAME.getBullet(WEHOUGAME.addBullet(WEHOUGAME.getBulletImg(1),400,400,0,'ball',1,[7/8,6/8,7/8,8/8])),period:50,position:vec2(0,0),positionrandom:vec2(0,0),lifetime:90,valpha:-0.3/90,size:vec2(0.5,0.5),alpha:0.3,vsize:vec2(0.01,0.01)},
